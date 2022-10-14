@@ -21,7 +21,7 @@ namespace JKScriptPack
         public Vector3 axis = new Vector3(0, 1, 0);
 
         /// <summary>
-        /// Displays summary at game start.
+        /// Runs every frame.
         /// </summary>
         void Update()
         {
