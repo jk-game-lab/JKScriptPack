@@ -6,7 +6,7 @@ namespace JKScriptPack
 {
 
     /// <summary>
-    /// Information about JKScriptPack.
+    /// Provides information about the JKScriptPack.
     /// </summary>
     public class About : MonoBehaviour
     {
@@ -14,7 +14,7 @@ namespace JKScriptPack
         private const string VERSION = "2.0";
 
         /// <summary>
-        /// Displays into summary at game start.
+        /// On game start, reports the current pack version.
         /// </summary>
         void Start()
         {
