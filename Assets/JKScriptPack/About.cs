@@ -11,7 +11,7 @@ namespace JKScriptPack
     public class About : MonoBehaviour
     {
 
-        private const string VERSION = "2.0";
+        private const string VERSION = "2.01";
 
         /// <summary>
         /// On game start, reports the current pack version.

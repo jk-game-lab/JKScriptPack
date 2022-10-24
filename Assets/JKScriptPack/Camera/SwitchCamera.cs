@@ -9,28 +9,28 @@ namespace JKScriptPack
 {
 
     /// <summary>
-    /// Switches between specified objects.
-    /// Attach this script to any static object in the game.
-    /// Do not attach it to a switchable object, because this 
-    /// may disable the script!
+    /// Switches between specified cameras.
+    /// Attach this script to any object in the game.
+    /// Do not attach it to any camera that might be
+    /// disabled!
     /// </summary>
     /// <remarks>
     /// 2022-10-14: Added to JKScriptPack
     /// 2022-10-22: Now compatible with both InputSystem and InputManager.
     /// </remarks>
-    public class Switch : MonoBehaviour
+    public class SwitchCamera : MonoBehaviour
     {
 
         [System.Serializable]
         public class Combo {
-            public GameObject item;
+            public Camera camera;
 #if ENABLE_INPUT_SYSTEM
             public Key key = UnityEngine.InputSystem.Key.None;
 #else
     		public KeyCode key = KeyCode.None;
 #endif
         }
-        [Tooltip("List of objects and associated keys.")]
+        [Tooltip("List of cameras and associated keys.")]
         public List<Combo> combos;
 
         [Tooltip("Enable if the object should switch back when the key is released.")]
@@ -41,10 +41,13 @@ namespace JKScriptPack
         /// </summary>
         void Start () {
             if (combos.Count > 0) {
-                enableCombo(combos[0]);
+                SwitchToCamera(combos[0]);
             }
         }
 
+        /// <summary>
+        /// Every frame, check for a keypress.
+        /// </summary>
         void Update () {
             foreach (Combo combo in combos) {
 #if ENABLE_INPUT_SYSTEM
@@ -55,19 +58,23 @@ namespace JKScriptPack
                 bool keyReleased = Input.GetKeyUp(combo.key);
 #endif
                 if (keyPressed) {
-                    enableCombo(combo);
+                    SwitchToCamera(combo);
                     break;
                 }
                 if (temporary && keyReleased) {
-                    enableCombo(combos[0]);
+                    SwitchToCamera(combos[0]);
                     break;
                 }
             }				
         }
 
-        private void enableCombo (Combo choice) {
+        /// <summary>
+        /// Switch to the numbered camera in the combo list.
+        /// </summary>
+        /// <param name="choice">Numbered camera in the combo list.</param>
+        private void SwitchToCamera (Combo choice) {
             foreach (Combo combo in combos) {
-                combo.item.SetActive(combo == choice);
+                combo.camera.gameObject.SetActive(combo == choice);
             }
         }
 
