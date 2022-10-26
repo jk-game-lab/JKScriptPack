@@ -21,34 +21,34 @@ namespace JKScriptPack
     {
 
         [Tooltip("Which camera to face")]
-        public Camera cameraToFace;
+        public Camera CameraToFace;
 
         [Tooltip("Flip object to face the opposite direction")]
-        public bool flipZDirection = false;
+        public bool FlipZDirection = false;
 
         [Tooltip("Track the camera vertically")]
-        public bool trackVertically = false;
+        public bool TrackVertically = false;
 
         /// <summary>
         /// Every frame, update this object's position.
         /// </summary>
         void Update()
         {
-            if (cameraToFace)
+            if (CameraToFace)
             {
 
                 // Rotate the billboard object to face the camera
-                if (flipZDirection)
+                if (FlipZDirection)
                 {
-                    this.transform.rotation = Quaternion.LookRotation(transform.position - cameraToFace.gameObject.transform.position);
+                    this.transform.rotation = Quaternion.LookRotation(transform.position - CameraToFace.gameObject.transform.position);
                 }
                 else
                 {
-                    this.transform.LookAt(cameraToFace.gameObject.transform);
+                    this.transform.LookAt(CameraToFace.gameObject.transform);
                 }
 
                 // Remove vertical component
-                if (!trackVertically)
+                if (!TrackVertically)
                 {
                     Vector3 eulerAngles = this.transform.eulerAngles;
                     eulerAngles.x = 0;

@@ -15,16 +15,16 @@ namespace JKScriptPack
     {
 
         [Tooltip("GameObject located at the destination (best using an empty gameobject)")]
-        public GameObject destination;
+        public GameObject Destination;
 
         /// <summary>
         /// Detects an object colliding with this one.
         /// </summary>
         void OnTriggerEnter(Collider other)
         {
-            if (destination)
+            if (Destination)
             {
-                other.transform.position = destination.transform.position;
+                other.transform.position = Destination.transform.position;
             }
         }
 

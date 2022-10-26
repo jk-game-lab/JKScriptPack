@@ -11,14 +11,20 @@ namespace JKScriptPack
     public class About : MonoBehaviour
     {
 
-        private const string VERSION = "2.02";
+        public const string Version = "2.02";
+
+        [Tooltip("Display the version number in the console when the game starts.")]
+        public bool ShowVersion = false;
 
         /// <summary>
         /// On game start, reports the current pack version.
         /// </summary>
         void Start()
         {
-            Debug.Log("JKScriptPack version " + VERSION);
+            if (ShowVersion)
+            {
+                Debug.Log("JKScriptPack version " + Version);
+            }
         }
 
     }

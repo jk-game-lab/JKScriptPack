@@ -170,9 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11952efbe1e6688468e8d7ba86976bb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: {x: 0, y: 1, z: 0}
-  transitTime: 1
-  smooth: 1
+  Distance: {x: 0, y: 1, z: 0}
+  TransitTime: 1
+  Smooth: 1
 --- !u!65 &59986879
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -965,8 +965,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d16349dec29be4f82b62c98713a716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.5
-  axis: {x: 0, y: 1, z: 0}
+  Speed: 1
+  Axis: {x: 0, y: 1, z: 0}
 --- !u!1 &691881185
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,9 +1520,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc22e6a0749f6da45af86d03095186e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraToFace: {fileID: 963194227}
-  flipZDirection: 0
-  trackVertically: 0
+  CameraToFace: {fileID: 963194227}
+  FlipZDirection: 0
+  TrackVertically: 0
 --- !u!65 &1203370464
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1786,7 +1786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 477bc016b67ef1447b8daf170aba5f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: {fileID: 859377526}
+  Destination: {fileID: 2031374051}
 --- !u!65 &2031374054
 BoxCollider:
   m_ObjectHideFlags: 0
