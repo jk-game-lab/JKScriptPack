@@ -30,6 +30,7 @@ namespace JKScriptPack
     		public KeyCode key = KeyCode.None;
 #endif
         }
+
         [Tooltip("List of cameras and associated keys.")]
         public List<Combo> combos;
 
