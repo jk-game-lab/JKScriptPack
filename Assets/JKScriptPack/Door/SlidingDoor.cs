@@ -9,44 +9,65 @@ namespace JKScriptPack
 {
 
     /// <summary>
-    /// Animates a sliding door (or a pair of sliding doors).
-    /// Apply this script to a trigger zone.
-    /// This will make a door slide open when the character
-    /// enters the zone. If you have a pair of doors, the
-    /// second door will move in the opposite direction to 
-    /// the first.
+    /// Animates a sliding door when a character enters a tigger zone.
+    /// Apply this script to the trigger zone.
     /// </summary>
     /// <remarks>
     /// 2022-11-06: Added to JKScriptPack
     /// </remarks>
     public class SlidingDoor : MonoBehaviour
     {
-        [Tooltip("Door object")]
-        public GameObject door = null;
 
-        [Tooltip("How far the door should move when opening")]
-        public Vector3 slide = new Vector3(-1.0f, 0, 0);
+        [Tooltip("Attach the door object here")]
+        public GameObject Door = null;
 
-        [Tooltip("Speed of opening in m/s")]
-        public float speed = 1.5f;
+        [Header("Movement")]
 
-        [Tooltip("Is the door open?")]
-        public bool isOpen = false;
+        [Tooltip("How far to move when opening")]
+        public Vector3 SlideDistance = new Vector3(-1.0f, 0, 0);
 
-        [Tooltip("Once opened, should the door stay open?")]
-        public bool keepOpen = false;
+        [Tooltip("Speed of movement in m/s")]
+        [Range(0, 100)]
+        public float Speed = 1.5f;
 
-        public GameObject secondDoor = null;
+        [Tooltip("The door's current state")]
+        public enum DoorState
+        {
+            Locked,
+            Closed,
+            Open,
+            WedgedOpen
+        }
+        [SerializeField]
+        private DoorState _currentState = DoorState.Closed;
+        public DoorState CurrentState
+        {
+            get
+            {
+                return _currentState;
+            }
+            set
+            {
+                _currentState = value;
+            }
+        }
 
-        private bool wasOpen;
+        [Header("Sound effects")]
 
-        private bool triggered = false;
-        public KeyCode keyboard = KeyCode.None;
+        [Tooltip("Play this sound when closing the door")]
+        public AudioClip Closing = null;
+        [Tooltip("Play this sound when opening the door")]
+        public AudioClip Opening = null;
 
-        public AudioClip openingSound = null;
-        public AudioClip closingSound = null;
+        private AudioSource _audiosource;
+
+
+
+
+        private bool _wasOpen;
+        private bool _triggered = false;
+
         //public float volume = 1.0f;
-        private AudioSource audiosource;
 
         private Vector3 doorOrigin;
         private Vector3 doorDestination;
@@ -59,91 +80,97 @@ namespace JKScriptPack
         {
 
             // Record the original & destination door positions
-            if (door)
+            if (Door)
             {
-                doorOrigin = door.transform.position;
-                doorDestination = door.transform.TransformPoint(slide);
-            }
-            if (secondDoor)
-            {
-                secondDoorOrigin = secondDoor.transform.position;
-                secondDoorDestination = secondDoor.transform.TransformPoint(-slide);
+                doorOrigin = Door.transform.position;
+                doorDestination = Door.transform.TransformPoint(SlideDistance);
             }
 
-            // Set up audio
-            if (door)
+            // Set up audio to come from the door (or, failing that, the trigger zone)
+            if (Door)
             {
-                audiosource = door.AddComponent<AudioSource>();
+                _audiosource = Door.AddComponent<AudioSource>();
             }
             else
             {
-                audiosource = gameObject.AddComponent<AudioSource>();
+                _audiosource = gameObject.AddComponent<AudioSource>();
             }
 
             // initialise
-            travel = isOpen ? 1 : 0;
-            wasOpen = isOpen;
+            if (CurrentState == DoorState.Closed || CurrentState == DoorState.Locked)
+            {
+                travel = 1;
+            }
+            else
+            {
+                travel = 0;
+            }
 
         }
+        /*
 
-        void OnTriggerEnter(Collider other)
-        {
-            triggered = true;
-            if (keyboard == KeyCode.None)
-            {
-                isOpen = true;
-            }
-        }
 
-        void OnTriggerExit(Collider other)
-        {
-            triggered = false;
-            isOpen = false;
-        }
+                void OnTriggerEnter(Collider other)
+                {
+                    _triggered = true;
+                    if (keyboard == KeyCode.None)
+                    {
+                        IsOpen = true;
+                    }
+                }
 
-        void Update()
-        {
+                void OnTriggerExit(Collider other)
+                {
+                    _triggered = false;
+                    IsOpen = false;
+                }
 
-            // Check for a keypress
-            if (triggered && Input.GetKeyDown(keyboard))
-            {
-                isOpen = !isOpen;
-            }
+                void Update()
+                {
 
-            // Override open state if keeping open
-            if (keepOpen && wasOpen)
-            {
-                isOpen = true;
-            }
+                    // Check for a keypress
+                    if (_triggered && Input.GetKeyDown(keyboard))
+                    {
+                        IsOpen = !IsOpen;
+                    }
 
-            // Check if the open state has changed
-            if (isOpen && !wasOpen)
-            {
-                //audiosource.volume = volume;
-                audiosource.PlayOneShot(openingSound);
-            }
-            else if (!isOpen && wasOpen)
-            {
-                //audiosource.volume = volume;
-                audiosource.PlayOneShot(closingSound);
-            }
-            wasOpen = isOpen;
+                    // Override open state if keeping open
+                    if (KeepOpen && _wasOpen)
+                    {
+                        IsOpen = true;
+                    }
 
-            // Work out where the door(s) should be
-            if (isOpen && travel < 1)
-            {
-                travel += speed * Time.deltaTime;
-                if (travel > 1) travel = 1;
-            }
-            else if (!isOpen && travel > 0)
-            {
-                travel -= speed * Time.deltaTime;
-                if (travel < 0) travel = 0;
-            }
-            if (door) door.transform.position = Vector3.Lerp(doorOrigin, doorDestination, travel);
-            if (secondDoor) secondDoor.transform.position = Vector3.Lerp(secondDoorOrigin, secondDoorDestination, travel);
+                    // Check if the open state has changed
+                    if (IsOpen && !_wasOpen)
+                    {
+                        //audiosource.volume = volume;
+                        _audiosource.PlayOneShot(OpeningSound);
+                    }
+                    else if (!IsOpen && _wasOpen)
+                    {
+                        //audiosource.volume = volume;
+                        _audiosource.PlayOneShot(ClosingSound);
+                    }
+                    _wasOpen = IsOpen;
 
-        }
+                    // Work out where the door(s) should be
+                    if (IsOpen && travel < 1)
+                    {
+                        travel += Speed * Time.deltaTime;
+                        if (travel > 1) travel = 1;
+                    }
+                    else if (!IsOpen && travel > 0)
+                    {
+                        travel -= Speed * Time.deltaTime;
+                        if (travel < 0) travel = 0;
+                    }
+                    if (Door) Door.transform.position = Vector3.Lerp(doorOrigin, doorDestination, travel);
+                    if (secondDoor) secondDoor.transform.position = Vector3.Lerp(secondDoorOrigin, secondDoorDestination, travel);
+
+                }
+
+                */
 
     }
+
 }
