@@ -69,12 +69,10 @@ namespace JKScriptPack
 
         //public float volume = 1.0f;
 
-        private Vector3 doorOrigin;
-        private Vector3 doorDestination;
-        private Vector3 secondDoorOrigin;
-        private Vector3 secondDoorDestination;
+        private Vector3 _origin;
+        private Vector3 _destination;
         private Vector3 pointB;
-        private float travel;   // varies between 0 and 1
+        private float _travel;   // varies between 0 and 1
 
         void Start()
         {
@@ -82,8 +80,8 @@ namespace JKScriptPack
             // Record the original & destination door positions
             if (Door)
             {
-                doorOrigin = Door.transform.position;
-                doorDestination = Door.transform.TransformPoint(SlideDistance);
+                _origin = Door.transform.position;
+                _destination = Door.transform.TransformPoint(SlideDistance);
             }
 
             // Set up audio to come from the door (or, failing that, the trigger zone)
@@ -97,33 +95,45 @@ namespace JKScriptPack
             }
 
             // initialise
-            if (CurrentState == DoorState.Closed || CurrentState == DoorState.Locked)
+            switch (_currentState)
             {
-                travel = 1;
-            }
-            else
-            {
-                travel = 0;
+            case DoorState.Open:
+            case DoorState.WedgedOpen:
+                _travel = 1;
+                break;
+            default:
+                _travel = 0;
+                break;
             }
 
         }
+
+        void OnTriggerEnter(Collider other)
+        {
+            this.Open();
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            this.Close();
+        }
+
         /*
 
-
-                void OnTriggerEnter(Collider other)
+            void OnTriggerEnter(Collider other)
+            {
+                _triggered = true;
+                if (keyboard == KeyCode.None)
                 {
-                    _triggered = true;
-                    if (keyboard == KeyCode.None)
-                    {
-                        IsOpen = true;
-                    }
+                    IsOpen = true;
                 }
+            }
 
-                void OnTriggerExit(Collider other)
-                {
-                    _triggered = false;
-                    IsOpen = false;
-                }
+            void OnTriggerExit(Collider other)
+            {
+                _triggered = false;
+                IsOpen = false;
+            }
 
                 void Update()
                 {
