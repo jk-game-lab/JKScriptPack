@@ -27,7 +27,7 @@ namespace JKScriptPack
         public Vector3 SlideDistance = new Vector3(-1.0f, 0, 0);
 
         [Tooltip("Speed of movement in m/s")]
-        [Range(0, 100)]
+        [Range(0, 10)]
         public float Speed = 1.5f;
 
         [Tooltip("The door's current state")]
@@ -59,7 +59,7 @@ namespace JKScriptPack
         [Tooltip("Play this sound when opening the door")]
         public AudioClip Opening = null;
 
-        private AudioSource _audiosource;
+        AudioSource _audiosource;
 
 
 
@@ -77,21 +77,20 @@ namespace JKScriptPack
         void Start()
         {
 
-            // Record the original & destination door positions
             if (Door)
-            {
+            { 
+                // Record the original & destination door positions
                 _origin = Door.transform.position;
                 _destination = Door.transform.TransformPoint(SlideDistance);
-            }
 
-            // Set up audio to come from the door (or, failing that, the trigger zone)
-            if (Door)
-            {
-                _audiosource = Door.AddComponent<AudioSource>();
+                // Set up audio to come from the door (or, failing that, the trigger zone)
+                //_audiosource = Door.AddComponent<AudioSource>();
+
             }
             else
             {
-                _audiosource = gameObject.AddComponent<AudioSource>();
+                // Set up audio to come from the trigger zone
+                //_audiosource = gameObject.AddComponent<AudioSource>();
             }
 
             // initialise
@@ -116,6 +115,16 @@ namespace JKScriptPack
         void OnTriggerExit(Collider other)
         {
             this.Close();
+        }
+
+        public void Open()
+        {
+
+        }
+
+        public void Close()
+        {
+
         }
 
         /*
