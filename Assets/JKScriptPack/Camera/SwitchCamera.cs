@@ -25,7 +25,7 @@ namespace JKScriptPack
         public class Combo {
             public Camera camera;
 #if ENABLE_INPUT_SYSTEM
-            public Key key = UnityEngine.InputSystem.Key.None;
+            public Key key = Key.None;
 #else
     		public KeyCode key = KeyCode.None;
 #endif
@@ -52,8 +52,12 @@ namespace JKScriptPack
         void Update () {
             foreach (Combo combo in combos) {
 #if ENABLE_INPUT_SYSTEM
-                bool keyPressed = Keyboard.current[combo.key].wasPressedThisFrame;
-                bool keyReleased = Keyboard.current[combo.key].wasReleasedThisFrame;
+                bool keyPressed = false;
+                bool keyReleased = false;
+                if (combo.key != Key.None) {    // 'None' is unavailable in current[] array
+                    keyPressed = Keyboard.current[combo.key].wasPressedThisFrame;
+                    keyReleased = Keyboard.current[combo.key].wasReleasedThisFrame;
+                }
 #else
                 bool keyPressed = Input.GetKeyDown(combo.key);
                 bool keyReleased = Input.GetKeyUp(combo.key);

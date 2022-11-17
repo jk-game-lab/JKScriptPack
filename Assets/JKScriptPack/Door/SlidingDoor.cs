@@ -65,14 +65,14 @@ namespace JKScriptPack
 
 
         private bool _wasOpen;
-        private bool _triggered = false;
+//        private bool _triggered = false;
 
         //public float volume = 1.0f;
 
         private Vector3 _origin;
         private Vector3 _destination;
         private Vector3 pointB;
-        private float _travel;   // varies between 0 and 1
+//        private float _travel;   // varies between 0 and 1
 
         void Start()
         {
@@ -98,10 +98,10 @@ namespace JKScriptPack
             {
             case DoorState.Open:
             case DoorState.WedgedOpen:
-                _travel = 1;
+//                _travel = 1;
                 break;
             default:
-                _travel = 0;
+//                _travel = 0;
                 break;
             }
 
