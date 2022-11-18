@@ -72,7 +72,7 @@ namespace JKScriptPack
         private Vector3 _origin;
         private Vector3 _destination;
         private Vector3 pointB;
-//        private float _travel;   // varies between 0 and 1
+        private float _travel;   // varies between 0 and 1
 
         void Start()
         {
@@ -98,10 +98,10 @@ namespace JKScriptPack
             {
             case DoorState.Open:
             case DoorState.WedgedOpen:
-//                _travel = 1;
+                _travel = 1;
                 break;
             default:
-//                _travel = 0;
+                _travel = 0;
                 break;
             }
 
@@ -119,14 +119,41 @@ namespace JKScriptPack
 
         public void Open()
         {
-
+            switch (_currentState)
+            {
+            case DoorState.Closed:
+                _currentState = DoorState.Open;
+                break;
+            default:
+                break;
+            }
         }
 
         public void Close()
         {
-
+            switch (_currentState)
+            {
+            case DoorState.Open:
+                _currentState = DoorState.Closed;
+                break;
+            default:
+                break;
+            }
         }
 
+        public void Lock()
+        {
+            switch (_currentState)
+            {
+            case DoorState.Open:
+            case DoorState.Closed:
+                _currentState = DoorState.Locked;
+                break;
+            default:
+                break;
+            }
+        }
+        
         /*
 
             void OnTriggerEnter(Collider other)
