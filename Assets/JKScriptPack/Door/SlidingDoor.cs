@@ -39,16 +39,16 @@ namespace JKScriptPack
             WedgedOpen
         }
         [SerializeField]
-        private DoorState _currentState = DoorState.Closed;
-        public DoorState CurrentState
+        private DoorState _state = DoorState.Closed;
+        public DoorState State
         {
             get
             {
-                return _currentState;
+                return _state;
             }
             set
             {
-                _currentState = value;
+                _state = value;
             }
         }
 
@@ -94,7 +94,7 @@ namespace JKScriptPack
             }
 
             // initialise
-            switch (_currentState)
+            switch (_state)
             {
             case DoorState.Open:
             case DoorState.WedgedOpen:
@@ -117,43 +117,65 @@ namespace JKScriptPack
             this.Close();
         }
 
-        public void Open()
+        public void SetState(DoorState newstate)
         {
-            switch (_currentState)
+            switch (newstate)
             {
-            case DoorState.Closed:
-                _currentState = DoorState.Open;
-                break;
-            default:
-                break;
+                case DoorState.Locked:
+                    if (_state == DoorState.Open || _state == DoorState.Closed)
+                    {
+                        _state = DoorState.Locked;
+                    }
+                    break;
+                case DoorState.Closed:
+                    if (_state == DoorState.Open)
+                    {
+                        _state = DoorState.Closed;
+                    }
+                    break;
+                case DoorState.Open:
+                    if (_state == DoorState.Closed)
+                    {
+                        _state = DoorState.Open;
+                    }
+                    break;
+                case DoorState.WedgedOpen:
+                    break;
+                default:
+                    break;
+        }
+
+
+        }
+
+        public void Open() this.SetState(DoorState.Open);
+        public void Close() this.SetState(DoorState.Closed);
+        public void Lock() this.SetState(DoorState.Locked);
+
+        public void Unlock()
+        {
+            if (_state == DoorState.Locked)
+            {
+                _state = DoorState.Closed;
             }
         }
 
-        public void Close()
+        public void Wedge()
         {
-            switch (_currentState)
+            if (_state == DoorState.Open || _state == DoorState.Closed)
             {
-            case DoorState.Open:
-                _currentState = DoorState.Closed;
-                break;
-            default:
-                break;
+                _state = DoorState.WedgedOpen;
             }
         }
 
         public void Lock()
         {
-            switch (_currentState)
+            if (_state == DoorState.Open || _state == DoorState.Closed)
             {
-            case DoorState.Open:
-            case DoorState.Closed:
-                _currentState = DoorState.Locked;
-                break;
-            default:
-                break;
+                _state = DoorState.Locked;
             }
         }
-        
+
         /*
 
             void OnTriggerEnter(Collider other)
