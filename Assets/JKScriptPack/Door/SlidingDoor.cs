@@ -35,8 +35,7 @@ namespace JKScriptPack
         {
             Locked,
             Closed,
-            Open,
-            WedgedOpen
+            Open
         }
         [SerializeField]
         private DoorState _state = DoorState.Closed;
@@ -48,9 +47,41 @@ namespace JKScriptPack
             }
             set
             {
-                _state = value;
+                // Allow any setting from editor mode
+                if (!Application.isPlaying){
+                    _state = value;
+                    return;
+                }
+
+                // Check that change of state is permitted
+                switch (value)
+                {
+                    case DoorState.Locked:
+                        if (_state == DoorState.Open || _state == DoorState.Closed)
+                        {
+                            _state = DoorState.Locked;
+                        }
+                        break;
+                    case DoorState.Closed:
+                        if (_state == DoorState.Open)
+                        {
+                            _state = DoorState.Closed;
+                        }
+                        break;
+                    case DoorState.Open:
+                        if (_state == DoorState.Closed)
+                        {
+                            _state = DoorState.Open;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+
+        [Tooltip("Automatically close door")]
+        public bool AutoClose = true;
 
         [Header("Sound effects")]
 
@@ -97,7 +128,6 @@ namespace JKScriptPack
             switch (_state)
             {
             case DoorState.Open:
-            case DoorState.WedgedOpen:
                 _travel = 1;
                 break;
             default:
@@ -115,37 +145,6 @@ namespace JKScriptPack
         void OnTriggerExit(Collider other)
         {
             this.Close();
-        }
-
-        public void SetState(DoorState newstate)
-        {
-            switch (newstate)
-            {
-                case DoorState.Locked:
-                    if (_state == DoorState.Open || _state == DoorState.Closed)
-                    {
-                        _state = DoorState.Locked;
-                    }
-                    break;
-                case DoorState.Closed:
-                    if (_state == DoorState.Open)
-                    {
-                        _state = DoorState.Closed;
-                    }
-                    break;
-                case DoorState.Open:
-                    if (_state == DoorState.Closed)
-                    {
-                        _state = DoorState.Open;
-                    }
-                    break;
-                case DoorState.WedgedOpen:
-                    break;
-                default:
-                    break;
-        }
-
-
         }
 
         public void Open() this.SetState(DoorState.Open);
