@@ -33,6 +33,23 @@ namespace JKScriptPack
 
         [Header("Control")]
 
+        [Tooltip("Is the door locked?")]
+        public bool IsLocked = false;
+
+        [Tooltip("Keep the door open?")]
+        public bool OpenByDefault = false;
+
+        [Tooltip("Operating mode")]
+        public enum DoorState
+        {
+            Open,
+            Closed,
+            Open
+        }
+
+        // If the door has no trigger zone, it will open when unlocked
+
+
         [Tooltip("The door's current state")]
         public enum DoorState
         {
