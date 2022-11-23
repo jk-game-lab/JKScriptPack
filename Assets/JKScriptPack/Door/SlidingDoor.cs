@@ -47,36 +47,39 @@ namespace JKScriptPack
             }
             set
             {
-                // Allow any setting from editor mode
-                if (!Application.isPlaying){
+                if (Application.isPlaying) {
+
+                    // Check that change of state is permitted
+                    switch (value)
+                    {
+                        case DoorState.Locked:
+                            if (_state == DoorState.Open || _state == DoorState.Closed)
+                            {
+                                _state = DoorState.Locked;
+                            }
+                            break;
+                        case DoorState.Closed:
+                            if (_state == DoorState.Open)
+                            {
+                                _state = DoorState.Closed;
+                            }
+                            break;
+                        case DoorState.Open:
+                            if (_state == DoorState.Closed)
+                            {
+                                _state = DoorState.Open;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+                else // editor mode: allow setting to directly changed
+                {
                     _state = value;
-                    return;
                 }
 
-                // Check that change of state is permitted
-                switch (value)
-                {
-                    case DoorState.Locked:
-                        if (_state == DoorState.Open || _state == DoorState.Closed)
-                        {
-                            _state = DoorState.Locked;
-                        }
-                        break;
-                    case DoorState.Closed:
-                        if (_state == DoorState.Open)
-                        {
-                            _state = DoorState.Closed;
-                        }
-                        break;
-                    case DoorState.Open:
-                        if (_state == DoorState.Closed)
-                        {
-                            _state = DoorState.Open;
-                        }
-                        break;
-                    default:
-                        break;
-                }
             }
         }
 
@@ -147,9 +150,9 @@ namespace JKScriptPack
             this.Close();
         }
 
-        public void Open() this.SetState(DoorState.Open);
-        public void Close() this.SetState(DoorState.Closed);
-        public void Lock() this.SetState(DoorState.Locked);
+        public void Open() SetState(DoorState.Open);
+        public void Close() SetState(DoorState.Closed);
+        public void Lock() SetState(DoorState.Locked);
 
         public void Unlock()
         {
