@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static JKScriptPack.SlidingDoor;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -29,6 +30,8 @@ namespace JKScriptPack
         [Tooltip("Speed of movement in m/s")]
         [Range(0, 10)]
         public float Speed = 1.5f;
+
+        [Header("Control")]
 
         [Tooltip("The door's current state")]
         public enum DoorState
@@ -149,6 +152,35 @@ namespace JKScriptPack
         {
             this.Close();
         }
+
+        private void SetDoorState(DoorState newstate)
+        {
+            switch (newstate)
+            {
+                case DoorState.Locked:
+                    if (_state == DoorState.Open || _state == DoorState.Closed)
+                    {
+                        _state = DoorState.Locked;
+                    }
+                    break;
+                case DoorState.Closed:
+                    if (_state == DoorState.Open)
+                    {
+                        _state = DoorState.Closed;
+                    }
+                    break;
+                case DoorState.Open:
+                    if (_state == DoorState.Closed)
+                    {
+                        _state = DoorState.Open;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
 
         public void Open() SetState(DoorState.Open);
         public void Close() SetState(DoorState.Closed);
