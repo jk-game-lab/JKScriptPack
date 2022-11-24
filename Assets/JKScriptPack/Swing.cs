@@ -34,5 +34,4 @@ public class Swing : MonoBehaviour {
 		transform.localRotation = Quaternion.Lerp(angleA, angleB, 0.5f * (1.0f + Mathf.Sin(elapsedTime * speed)) );
 	}
 
-
 }

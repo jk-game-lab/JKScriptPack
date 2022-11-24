@@ -11,6 +11,10 @@
  * 	Apply this scrip to the player's 'invisible hand' trigger zone.
  * 
  *	v1.33 -- added to JKScriptPack.
+ *	
+ *	
+ *	NEED UPDATING
+ *	
  */
 
 using System.Collections;
