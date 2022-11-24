@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JKScriptPack
+namespace JKScriptPack3
 {
 
     /// <summary>
@@ -11,7 +11,7 @@ namespace JKScriptPack
     public class About : MonoBehaviour
     {
 
-        public const string Version = "2.02";
+        public const string Version = "3.00";
 
         [Tooltip("Display the version number in the console when the game starts.")]
         public bool ShowVersion = false;

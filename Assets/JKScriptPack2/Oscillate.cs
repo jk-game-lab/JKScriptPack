@@ -2,23 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JKScriptPack
+namespace JKScriptPack2
 {
 
+    /// ------------------------------------------
     /// <summary>
-    /// Makes an object move to-and-from another position.
-    /// Attach this script to the object that will move.
+    /// 
+    ///     Makes an object move back-and-forth 
+    ///     repeatedly.
+    ///     
+    ///     Attach this script to the gameobject
+    ///     that needs to move.
+    ///     
     /// </summary>
-    /// <remarks>
-    /// 2022-10-25: Added to JKScriptPack
-    /// </remarks>
+    /// ------------------------------------------
     public class Oscillate : MonoBehaviour
     {
 
         [Tooltip("How far to move from the start point")]
         public Vector3 Distance = new Vector3(0, 1, 0);
 
-        [Tooltip("Time for transit (in seconds).")]
+        [Tooltip("Time period (in seconds) for movement.")]
         public float TransitTime = 1;
 
         [Tooltip("Accelerate and decelerate?")]
@@ -28,18 +32,12 @@ namespace JKScriptPack
         private float _elapsedTime;
         private bool _reverse;
 
-        /// <summary>
-        /// At game start, record starting position.
-        /// </summary>
         void Start()
         {
             _origin = this.transform.localPosition;
             _reverse = false;
         }
 
-        /// <summary>
-        /// Runs every frame.
-        /// </summary>
         void Update()
         {
 
@@ -75,8 +73,6 @@ namespace JKScriptPack
             }
 
         }
-
-
 
     }
 

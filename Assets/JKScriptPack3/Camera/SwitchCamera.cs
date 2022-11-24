@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-namespace JKScriptPack
+namespace JKScriptPack3
 {
 
     /// <summary>
@@ -22,12 +22,13 @@ namespace JKScriptPack
     {
 
         [System.Serializable]
-        public class Combo {
+        public class Combo
+        {
             public Camera camera;
 #if ENABLE_INPUT_SYSTEM
             public Key key = Key.None;
 #else
-    		public KeyCode key = KeyCode.None;
+            public KeyCode key = KeyCode.None;
 #endif
         }
 
@@ -40,8 +41,10 @@ namespace JKScriptPack
         /// <summary>
         /// Enable the first item in the switch list
         /// </summary>
-        void Start () {
-            if (combos.Count > 0) {
+        void Start()
+        {
+            if (combos.Count > 0)
+            {
                 SwitchToCamera(combos[0]);
             }
         }
@@ -49,8 +52,10 @@ namespace JKScriptPack
         /// <summary>
         /// Every frame, check for a keypress.
         /// </summary>
-        void Update () {
-            foreach (Combo combo in combos) {
+        void Update()
+        {
+            foreach (Combo combo in combos)
+            {
 #if ENABLE_INPUT_SYSTEM
                 bool keyPressed = false;
                 bool keyReleased = false;
@@ -62,23 +67,27 @@ namespace JKScriptPack
                 bool keyPressed = Input.GetKeyDown(combo.key);
                 bool keyReleased = Input.GetKeyUp(combo.key);
 #endif
-                if (keyPressed) {
+                if (keyPressed)
+                {
                     SwitchToCamera(combo);
                     break;
                 }
-                if (temporary && keyReleased) {
+                if (temporary && keyReleased)
+                {
                     SwitchToCamera(combos[0]);
                     break;
                 }
-            }				
+            }
         }
 
         /// <summary>
         /// Switch to the numbered camera in the combo list.
         /// </summary>
         /// <param name="choice">Numbered camera in the combo list.</param>
-        private void SwitchToCamera (Combo choice) {
-            foreach (Combo combo in combos) {
+        private void SwitchToCamera(Combo choice)
+        {
+            foreach (Combo combo in combos)
+            {
                 combo.camera.gameObject.SetActive(combo == choice);
             }
         }

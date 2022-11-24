@@ -1,22 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM
-using UnityEngine.InputSystem;
-#endif
 
-namespace JKScriptPack
+namespace JKScriptPack2
 {
-
+    /// ------------------------------------------
     /// <summary>
-    /// Orients an object to face toward the 
-    /// camera at all times.
-    /// Attach this script to the billboard
-    /// object.
+    /// 
+    ///     Orients an object to face toward the 
+    ///     camera at all times.
+    ///     
+    ///     Attach this script to the gameobject
+    ///     that needs to face the camera.
+    ///     
     /// </summary>
-    /// <remarks>
-    /// 2022-10-24: Added to JKScriptPack
-    /// </remarks>
+    /// ------------------------------------------
     public class Billboard : MonoBehaviour
     {
 
@@ -29,9 +27,6 @@ namespace JKScriptPack
         [Tooltip("Track the camera vertically")]
         public bool TrackVertically = false;
 
-        /// <summary>
-        /// Every frame, update this object's position.
-        /// </summary>
         void Update()
         {
             if (CameraToFace)
