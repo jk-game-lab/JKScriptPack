@@ -20,7 +20,7 @@ namespace JKScriptPack2
     {
 
         [Tooltip("Current version number of the script pack")]
-        public const string Version = "2.05";
+        public const string Version = "2.10";
 
         void Start()
         {
