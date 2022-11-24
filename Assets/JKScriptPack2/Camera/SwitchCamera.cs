@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-namespace JKScriptPack
+namespace JKScriptPack2
 {
 
     /// ------------------------------------------
@@ -48,8 +48,16 @@ namespace JKScriptPack
         [Tooltip("List of cameras and associated keys.")]
         public List<SelectableCamera> CameraList;
 
-        [Tooltip("Enable to switch back to camera 0 when the key is released.")]
+        [Tooltip("Should it switch back to camera 0 when the key is released?")]
         public bool IsTemporary = false;
+
+		// void Reset()
+		// {
+		// 	SelectableCamera main = new SelectableCamera();
+		// 	main.Camera = GameObject.FindGameObjectWithTag("MainCamera");
+		// 	CameraList = new List<SelectableCamera>();
+		// 	CameraList.Add(main);
+		// }
 
         void Start()
         {
