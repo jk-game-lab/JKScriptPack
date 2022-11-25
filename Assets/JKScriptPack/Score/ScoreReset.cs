@@ -1,12 +1,12 @@
 ﻿/*
- *	ScoreReset.cs
+ *  ScoreReset.cs
  * 
- *	Attach this script to any gameobject in a scene
- *	to wipe the score when this level starts.
+ *  Attach this script to any gameobject in a scene
+ *  to wipe the score when this level starts.
  *
- *	This script updates the score held in GlobalScore.cs
+ *  This script updates the score held in GlobalScore.cs
  *
- *	v1.42 -- added to JKScriptPack
+ *  v1.42 -- added to JKScriptPack
  *	
  */
 
@@ -15,10 +15,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreReset : MonoBehaviour {
+public class ScoreReset : MonoBehaviour
+{
 
-	void Start () {
-		GlobalScore.score = 0;
-	}
+    void Start()
+    {
+        GlobalScore.score = 0;
+    }
 
 }

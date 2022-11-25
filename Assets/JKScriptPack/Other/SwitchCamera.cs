@@ -29,10 +29,10 @@ using UnityEngine.InputSystem;
 public class SwitchCamera : MonoBehaviour
 {
 
-	[System.Serializable]
-	public class CameraCombo
-	{
-		public GameObject camera;
+    [System.Serializable]
+    public class CameraCombo
+    {
+        public GameObject camera;
 #if ENABLE_INPUT_SYSTEM
         public Key key = Key.None;
 #else
@@ -46,46 +46,46 @@ public class SwitchCamera : MonoBehaviour
     [Tooltip("Should it switch back to camera 0 when the key is released?")]
     public bool temporary = true;
 
-	void Reset()
-	{
-		CameraCombo main = new CameraCombo();
-		main.camera = GameObject.FindGameObjectWithTag("MainCamera");
-		combos = new List<CameraCombo>();
-		combos.Add(main);
-	}
+    void Reset()
+    {
+        CameraCombo main = new CameraCombo();
+        main.camera = GameObject.FindGameObjectWithTag("MainCamera");
+        combos = new List<CameraCombo>();
+        combos.Add(main);
+    }
 
-	void Start()
-	{
-		if (combos.Count > 0)
-		{
-			enableCombo(combos[0]);
-		}
-	}
+    void Start()
+    {
+        if (combos.Count > 0)
+        {
+            enableCombo(combos[0]);
+        }
+    }
 
-	void Update()
-	{
-		foreach (CameraCombo combo in combos)
-		{
-			if (IsKeyPressed(combo.key))
-			{
-				enableCombo(combo);
-				break;
-			}
-			if (temporary && IsKeyReleased(combo.key))
-			{
-				enableCombo(combos[0]);
-				break;
-			}
-		}
-	}
+    void Update()
+    {
+        foreach (CameraCombo combo in combos)
+        {
+            if (IsKeyPressed(combo.key))
+            {
+                enableCombo(combo);
+                break;
+            }
+            if (temporary && IsKeyReleased(combo.key))
+            {
+                enableCombo(combos[0]);
+                break;
+            }
+        }
+    }
 
-	void enableCombo(CameraCombo choice)
-	{
-		foreach (CameraCombo combo in combos)
-		{
-			combo.camera.SetActive(combo == choice);
-		}
-	}
+    void enableCombo(CameraCombo choice)
+    {
+        foreach (CameraCombo combo in combos)
+        {
+            combo.camera.SetActive(combo == choice);
+        }
+    }
 
     /// <summary>
     /// Check if a key has been pressed.

@@ -1,110 +1,188 @@
-﻿/*
- * 	Grabber.cs
- *
- * 	Allows a player to "grab" objects.
- *
- *	Create a trigger zone and attach it to the player as a kind of 'invisible hand'.
- *	A grabbable object that comes within this zone may be grabbed by pressing a key.
- *
- *	To make an object grabbable, change its tag to "grabbable".  (You may need to add a new tag to the list.)
- * 
- * 	Apply this scrip to the player's 'invisible hand' trigger zone.
- * 
- *	v1.33 -- added to JKScriptPack.
- *	
- *	
- *	NEED UPDATING
- *	
- */
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
-public class Grabber : MonoBehaviour {
+/// ------------------------------------------
+/// <summary>
+/// 
+///     Allows a player to "grab" objects.
+///
+///     Create a trigger zone (invisible 
+///     GameObject with Collider.isTrigger 
+///     enabled) and attach it to the player 
+///     as a kind of 'invisible hand'.  Apply
+///     this script to the zone.
+///     
+///     A grabbable object that comes within 
+///     this zone may be grabbed by pressing 
+///     a key.
+///		
+///     To make an object grabbable, change 
+///     its tag to "grabbable".  (You may 
+///     need to add a new tag to the list.)
+///     
+/// </summary>
+/// <remarks>
+/// 
+///     Updated to work with new Input System
+///     (as well as old Input Manager).
+/// 
+/// </remarks>
+/// ------------------------------------------
+public class Grabber : MonoBehaviour
+{
 
-	[Tooltip("Which key grabs things?")]
-	public KeyCode grabKey = KeyCode.G;
+    [Tooltip("Which key grabs things?")]
+#if ENABLE_INPUT_SYSTEM
+    public Key grabKey = Key.G;
+#else
+    public KeyCode grabKey = KeyCode.G;
+#endif
 
-	[Tooltip("Press key to grab and again to release?")]
-	public bool toggle = true;
+    [Tooltip("Press key to grab and again to release?")]
+    public bool toggle = true;
 
-	[Tooltip("Does the grabbable get pulled to me?")]
-	public bool moveToMe = true;
-	public float moveSpeed = 10.0f;
-//	public bool followMe = false;
+    [Tooltip("Does the grabbable get pulled to me?")]
+    public bool moveToMe = true;
+    public float moveSpeed = 10.0f;
+    //public bool followMe = false;
 
-	private GameObject triggered = null;
-	private GameObject grabbed = null;
-	private bool gravity;
-	private bool trapped;
+    private GameObject triggered = null;
+    private GameObject grabbed = null;
+    private bool gravity;
+    private bool trapped;
+    private Vector3 relativePosition;
 
-	private Vector3 relativePosition;
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.ToLower() == "grabbable")
+        {
+            triggered = other.gameObject;
+        }
+    }
 
-	void Start () {
-	}
+    void OnTriggerExit(Collider other)
+    {
+        triggered = null;
+    }
 
-	void OnTriggerEnter(Collider other)
-	{
-		if (other.tag.ToLower () == "grabbable") {
-			triggered = other.gameObject;
-		}
-	}
+    void Update()
+    {
 
-	void OnTriggerExit(Collider other)
-	{
-		triggered = null;
-	}
+        if (IsKeyPressed(grabKey))
+        {
+            if (triggered && !grabbed)
+            {
+                Grab(triggered);
+            }
+            else if (toggle)
+            {
+                Release();
+            }
+        }
+        else if (IsKeyReleased(grabKey) && !toggle)
+        {
+            Release();
+        }
 
-	void Grab(GameObject grabbable) {
-		grabbed = grabbable;
-		relativePosition = grabbed.transform.position - this.transform.position;
-		Rigidbody rb = grabbed.GetComponentInChildren<Rigidbody>();
-		if (rb) {
-			gravity = rb.useGravity;
-			rb.useGravity = false;
-		}
-		trapped = false;
-	}
+        if (grabbed)
+        {
+            if (moveToMe && !trapped)
+            {
+                if (relativePosition.magnitude > 0.1f)
+                {
+                    grabbed.transform.position = Vector3.Lerp(grabbed.transform.position, this.transform.position, Time.deltaTime * moveSpeed);
+                    relativePosition = grabbed.transform.position - this.transform.position;
+                }
+                else
+                {
+                    grabbed.transform.position = this.transform.position;
+                    //if (!followMe) {
+                    trapped = true;
+                    //}
+                }
+            }
+            grabbed.transform.position = this.transform.position + relativePosition;
+        }
+    }
 
-	void Release() {
-		if (grabbed) {
-			Rigidbody rb = grabbed.GetComponentInChildren<Rigidbody> ();
-			if (rb) {
-				rb.useGravity = gravity;
-			}
-			trapped = false;
-			grabbed = null;
-		}
-	}
+    /// <summary>
+    /// Capture details of the object to drag.
+    /// </summary>
+    /// <param name="grabbable">The GameObject that will be dragged.</param>
+    public void Grab(GameObject grabbable)
+    {
+        grabbed = grabbable;
+        relativePosition = grabbed.transform.position - this.transform.position;
+        Rigidbody rb = grabbed.GetComponentInChildren<Rigidbody>();
+        if (rb)
+        {
+            gravity = rb.useGravity;
+            rb.useGravity = false;
+        }
+        trapped = false;
+    }
 
-	void Update () {
+    /// <summary>
+    /// Return the dragged object to normality.
+    /// </summary>
+	void Release()
+    {
+        if (grabbed)
+        {
+            Rigidbody rb = grabbed.GetComponentInChildren<Rigidbody>();
+            if (rb)
+            {
+                rb.useGravity = gravity;
+            }
+            trapped = false;
+            grabbed = null;
+        }
+    }
 
-		if (Input.GetKeyDown(grabKey)) {
-			if (triggered && !grabbed) {
-				Grab (triggered);
-			} else {
-				if (toggle) {
-					Release ();
-				}
-			}
-		} else if (Input.GetKeyUp(grabKey) && !toggle) {
-			Release ();
-		}
+    /// <summary>
+    /// Check if a key has been pressed.
+    /// </summary>
+    /// <param name="k">Key on keyboard.</param>
+    /// <returns>True if pressed; false if not.<returns>
+#if ENABLE_INPUT_SYSTEM
+    private bool IsKeyPressed(Key k)
+    {
+        // Check before lookup; current[Key.None] would cause an error
+        if (k != Key.None) {     
+            return Keyboard.current[k].wasPressedThisFrame;
+        }
+        return false;
+    }
+#else
+    private bool IsKeyPressed(KeyCode k)
+    {
+        return Input.GetKeyDown(k);
+    }
+#endif
 
-		if (grabbed) {
-			if (moveToMe && !trapped) {
-				if (relativePosition.magnitude > 0.1f) {
-					grabbed.transform.position = Vector3.Lerp (grabbed.transform.position, this.transform.position, Time.deltaTime * moveSpeed);
-					relativePosition = grabbed.transform.position - this.transform.position; 
-				} else {
-					grabbed.transform.position = this.transform.position;
-					//if (!followMe) {
-						trapped = true;
-					//}
-				}
-			}
-			grabbed.transform.position = this.transform.position + relativePosition;
-		}
-	}
+    /// <summary>
+    /// Check if a key has been released.
+    /// </summary>
+    /// <param name="k">Key on keyboard.</param>
+    /// <returns>True if pressed; false if not.<returns>
+#if ENABLE_INPUT_SYSTEM
+    private bool IsKeyReleased(Key k)
+    {
+        // Check before lookup; current[Key.None] would cause an error
+        if (k != Key.None) {     
+            return Keyboard.current[k].wasReleasedThisFrame;
+        }
+        return false;
+    }
+#else
+    private bool IsKeyReleased(KeyCode k)
+    {
+        return Input.GetKeyUp(k);
+    }
+#endif
+
 }

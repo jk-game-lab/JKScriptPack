@@ -23,56 +23,69 @@ using UnityEngine.InputSystem;
 /// 
 /// </remarks>
 /// ------------------------------------------
-public class Torch : MonoBehaviour {
+public class Torch : MonoBehaviour
+{
 
-	public GameObject lightsource;
-	public bool illuminate = false;
+    public GameObject lightsource;
+    public bool illuminate = false;
 #if ENABLE_INPUT_SYSTEM
-        public Key illuminateKey = Key.L;
+    public Key illuminateKey = Key.L;
 #else
     public KeyCode illuminateKey = KeyCode.L;
 #endif
 
     public GameObject torch;
-	public bool brandish = false;
+    public bool brandish = false;
 #if ENABLE_INPUT_SYSTEM
-        public Key brandishKey = Key.T;
+    public Key brandishKey = Key.T;
 #else
     public KeyCode brandishKey = KeyCode.T;
 #endif
 
-    void Update () {
+    void Update()
+    {
 
-		// Check for key presses
-		if (IsKeyPressed(illuminateKey)) {
-			illuminate = !illuminate;
-		}
-		if (IsKeyPressed(brandishKey)) {
-			brandish = !brandish;
-		}
+        // Check for key presses
+        if (IsKeyPressed(illuminateKey))
+        {
+            illuminate = !illuminate;
+        }
+        if (IsKeyPressed(brandishKey))
+        {
+            brandish = !brandish;
+        }
 
-		// If there's a torch object, decide whether to show it
-		if (torch) {
-			if (brandish) {
-				torch.SetActive (true);
-				if (lightsource) {
-					lightsource.SetActive (illuminate);
-				}
-			} else {
-				torch.SetActive (false);
-				if (lightsource) {
-					lightsource.SetActive (false);
-				}
-			}
+        // If there's a torch object, decide whether to show it
+        if (torch)
+        {
+            if (brandish)
+            {
+                torch.SetActive(true);
+                if (lightsource)
+                {
+                    lightsource.SetActive(illuminate);
+                }
+            }
+            else
+            {
+                torch.SetActive(false);
+                if (lightsource)
+                {
+                    lightsource.SetActive(false);
+                }
+            }
 
-		// Otherwise, just handle the light on its own
-		} else {
-			if (lightsource) {
-				lightsource.SetActive (illuminate);
-			}
-		}
+            // Otherwise, just handle the light on its own
+        }
+        else
+        {
+            if (lightsource)
+            {
+                lightsource.SetActive(illuminate);
+            }
+        }
 
-	}
+    }
 
     /// <summary>
     /// Check if a key has been pressed.
@@ -80,14 +93,14 @@ public class Torch : MonoBehaviour {
     /// <param name="k">Key on keyboard.</param>
     /// <returns>True if pressed; false if not.<returns>
 #if ENABLE_INPUT_SYSTEM
-        private bool IsKeyPressed(Key k)
-        {
-            // Check before lookup; current[Key.None] would cause an error
-            if (k != Key.None) {     
-                return Keyboard.current[k].wasPressedThisFrame;
-            }
-            return false;
+    private bool IsKeyPressed(Key k)
+    {
+        // Check before lookup; current[Key.None] would cause an error
+        if (k != Key.None) {     
+            return Keyboard.current[k].wasPressedThisFrame;
         }
+        return false;
+    }
 #else
     private bool IsKeyPressed(KeyCode k)
     {

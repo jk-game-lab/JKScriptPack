@@ -46,7 +46,7 @@ public class DoorSwing : MonoBehaviour
     public KeyCode keyboard = KeyCode.None;
 #endif
     public bool open = false;
-	public bool keepOpen = false;
+    public bool keepOpen = false;
     public bool pressKeyToClose = false;
 
     [Header("Sound Effects")]
@@ -121,13 +121,13 @@ public class DoorSwing : MonoBehaviour
         if (open && !wasOpen)
         {
             //audiosource.volume = volume;
-            audiosource.PlayOneShot(openingSound);
+            if (openingSound) audiosource.PlayOneShot(openingSound);
             handle.Start();
         }
         else if (!open && wasOpen)
         {
             //audiosource.volume = volume;
-            audiosource.PlayOneShot(closingSound);
+            if (closingSound) audiosource.PlayOneShot(closingSound);
         }
         wasOpen = open;
 

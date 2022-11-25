@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 /// ------------------------------------------
 /// <summary>
@@ -14,14 +14,14 @@ using UnityEngine;
 /// </summary>
 /// <remarks>
 /// 
-///		This pack is now in "maintenance mode".
-///		No further scripts will be added; 
-///		new releases of this pack will contain
-///		bug fixes only.
+///     This pack is now in "maintenance mode".
+///     No further scripts will be added; 
+///     new releases of this pack will contain
+///     bug fixes only.
 ///		
-///		It will eventually be replaced by 
-///		JKScriptPack2, which is currently in
-///		development.
+///     It will eventually be replaced by 
+///     JKScriptPack2, which is currently in
+///     development.
 /// 
 /// </remarks>
 /// ------------------------------------------

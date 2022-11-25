@@ -33,69 +33,69 @@ using UnityEngine.InputSystem;
 public class DoorSlide : MonoBehaviour
 {
 
-	[Header("Door(s)")]
+    [Header("Door(s)")]
 
-	public GameObject door = null;
-	public GameObject secondDoor = null;
+    public GameObject door = null;
+    public GameObject secondDoor = null;
 
-	[Header("Movement")]
+    [Header("Movement")]
 
-	public Vector3 slide = new Vector3(-1.0f, 0, 0);
-	public float speed = 3.0f;
+    public Vector3 slide = new Vector3(-1.0f, 0, 0);
+    public float speed = 3.0f;
 #if ENABLE_INPUT_SYSTEM
     public Key keyboard = Key.None;
 #else
     public KeyCode keyboard = KeyCode.None;
 #endif
-	public bool open = false;
-	public bool keepOpen = false;
+    public bool open = false;
+    public bool keepOpen = false;
 
-	[Header("Sound Effects")]
+    [Header("Sound Effects")]
 
-	public AudioClip openingSound = null;
-	public AudioClip closingSound = null;
+    public AudioClip openingSound = null;
+    public AudioClip closingSound = null;
 
-	private Vector3 doorOrigin;
-	private Vector3 doorDestination;
-	private Vector3 secondDoorOrigin;
-	private Vector3 secondDoorDestination;
-	private Vector3 pointB;
-	private float travel;   // varies between 0 and 1
-	private bool wasOpen;
-	private bool triggered = false;
-	private AudioSource audiosource;
-	//public float volume = 1.0f;
+    private Vector3 doorOrigin;
+    private Vector3 doorDestination;
+    private Vector3 secondDoorOrigin;
+    private Vector3 secondDoorDestination;
+    private Vector3 pointB;
+    private float travel;   // varies between 0 and 1
+    private bool wasOpen;
+    private bool triggered = false;
+    private AudioSource audiosource;
+    //public float volume = 1.0f;
 
-	void Start()
-	{
+    void Start()
+    {
 
-		// Record the original & destination door positions
-		if (door)
-		{
-			doorOrigin = door.transform.position;
-			doorDestination = door.transform.TransformPoint(slide);
-		}
-		if (secondDoor)
-		{
-			secondDoorOrigin = secondDoor.transform.position;
-			secondDoorDestination = secondDoor.transform.TransformPoint(-slide);
-		}
+        // Record the original & destination door positions
+        if (door)
+        {
+            doorOrigin = door.transform.position;
+            doorDestination = door.transform.TransformPoint(slide);
+        }
+        if (secondDoor)
+        {
+            secondDoorOrigin = secondDoor.transform.position;
+            secondDoorDestination = secondDoor.transform.TransformPoint(-slide);
+        }
 
-		// Set up audio
-		if (door)
-		{
-			audiosource = door.AddComponent<AudioSource>();
-		}
-		else
-		{
-			audiosource = gameObject.AddComponent<AudioSource>();
-		}
+        // Set up audio
+        if (door)
+        {
+            audiosource = door.AddComponent<AudioSource>();
+        }
+        else
+        {
+            audiosource = gameObject.AddComponent<AudioSource>();
+        }
 
-		// initialise
-		travel = open ? 1 : 0;
-		wasOpen = open;
+        // initialise
+        travel = open ? 1 : 0;
+        wasOpen = open;
 
-	}
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -131,12 +131,12 @@ public class DoorSlide : MonoBehaviour
         if (open && !wasOpen)
         {
             //audiosource.volume = volume;
-            audiosource.PlayOneShot(openingSound);
+            if (openingSound) audiosource.PlayOneShot(openingSound);
         }
         else if (!open && wasOpen)
         {
             //audiosource.volume = volume;
-            audiosource.PlayOneShot(closingSound);
+            if (closingSound) audiosource.PlayOneShot(closingSound);
         }
         wasOpen = open;
 

@@ -1,102 +1,126 @@
 ﻿/*
- *	LoadNewScene.cs
+ *  LoadNewScene.cs
  * 
- *	Attach this script to any gameobject in the scene.
+ *  Attach this script to any gameobject in the scene.
  *
- *	However, if you wish to use the 'collide' facility,
- *	you must attach this script to the first person controller.
+ *  However, if you wish to use the 'collide' facility,
+ *  you must attach this script to the first person controller.
  *
- *	Leaving the scene blank will restart the current level.
+ *  Leaving the scene blank will restart the current level.
  *
- *	Note: due to a bug in Unity 2017, the editor may show lighting
- *	darker after loading a scene.  This can be disabled with menu
- *	Window > Lighting > Settings, scene tab > Debug Seggings and
- *	disable Auto Generate; press Generate Lighting to bake the 
- *	lighting once, manually.
+ *  Note: due to a bug in Unity 2017+, the editor may show lighting
+ *  darker after loading a scene.  This can be disabled with menu
+ *  Window > Lighting > Settings, scene tab > Debug Seggings and
+ *  disable Auto Generate; press Generate Lighting to bake the 
+ *  lighting once, manually.
  *
- *	v1.00 -- added to JKScriptPack
- *	v1.09 -- updated for Unity 2017
- *	v1.16 -- added TriggerAndKey
- *	v1.41 -- now works with prefab clones
+ *  v1.00 -- added to JKScriptPack
+ *  v1.09 -- updated for Unity 2017
+ *  v1.16 -- added TriggerAndKey
+ *  v1.41 -- now works with prefab clones
  *	
  */
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoadNewScene : MonoBehaviour {
+public class LoadNewScene : MonoBehaviour
+{
 
-	public string sceneName;
-	public GameObject onCollisionWith;
-	public KeyCode onKeyPress;
-	public float onTimeout;
-	public bool triggerAndKey = false;
-	
-	private float timeSoFar;
-	private bool triggered = false;
+    public string sceneName;
+    public GameObject onCollisionWith;
+    public KeyCode onKeyPress;
+    public float onTimeout;
+    public bool triggerAndKey = false;
 
-	void Start () {
-		timeSoFar = 0.0f;
-	}
-	
-	void Update () {
+    private float timeSoFar;
+    private bool triggered = false;
 
-		// Check for keypress
-		if (Input.GetKeyDown(onKeyPress)) {
-			if (triggerAndKey) {
-				if (triggered) {
-					LoadScene();
-				}
-			} else {
-				LoadScene();
-			}
-		}
+    void Start()
+    {
+        timeSoFar = 0.0f;
+    }
 
-		// Check for timeout
-		if (onTimeout > 0) {
-			timeSoFar += Time.deltaTime;
-			if (timeSoFar >= onTimeout) {
-				LoadScene();
-			}
-		}
+    void Update()
+    {
 
-	}
-	
-	void OnCollisionEnter(Collision collision) {
-		CheckCollision (collision.gameObject);
-	}
-	
-	void OnControllerColliderHit(ControllerColliderHit hit) {
-		CheckCollision (hit.collider.gameObject);
-	}
-	
-	void OnTriggerEnter(Collider collider) {
-		if (triggerAndKey) {
-			triggered = true;
-		} else {
-			CheckCollision (collider.gameObject);
-		}
-	}
+        // Check for keypress
+        if (Input.GetKeyDown(onKeyPress))
+        {
+            if (triggerAndKey)
+            {
+                if (triggered)
+                {
+                    LoadScene();
+                }
+            }
+            else
+            {
+                LoadScene();
+            }
+        }
 
-	void OnTriggerExit(Collider collider) {
-		triggered = false;
-	}
-	
-	private void CheckCollision(GameObject other) {
-		if (other.name != "Terrain") {
-			//Debug.Log (other.name + " ... " + onCollisionWith.gameObject.name);
-			if (onCollisionWith && (other.Equals (onCollisionWith) || other.name == onCollisionWith.name || other.name == (onCollisionWith.name + "(Clone)"))) {
-				LoadScene();
-			}
-		}
-	}
+        // Check for timeout
+        if (onTimeout > 0)
+        {
+            timeSoFar += Time.deltaTime;
+            if (timeSoFar >= onTimeout)
+            {
+                LoadScene();
+            }
+        }
 
-	public void LoadScene() {
-		if (sceneName.Equals("")) {
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		} else {
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        CheckCollision(collision.gameObject);
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        CheckCollision(hit.collider.gameObject);
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (triggerAndKey)
+        {
+            triggered = true;
+        }
+        else
+        {
+            CheckCollision(collider.gameObject);
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        triggered = false;
+    }
+
+    private void CheckCollision(GameObject other)
+    {
+        if (other.name != "Terrain")
+        {
+            //Debug.Log (other.name + " ... " + onCollisionWith.gameObject.name);
+            if (onCollisionWith && (other.Equals(onCollisionWith) || other.name == onCollisionWith.name || other.name == (onCollisionWith.name + "(Clone)")))
+            {
+                LoadScene();
+            }
+        }
+    }
+
+    public void LoadScene()
+    {
+        if (sceneName.Equals(""))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        else
+        {
             SceneManager.LoadScene(sceneName);
-		}
-	}
-	
+        }
+    }
+
 }
