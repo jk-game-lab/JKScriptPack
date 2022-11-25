@@ -237,6 +237,5 @@ public class BetterWaypointFollower : MonoBehaviour
         return waypointList[index];
     }
 
-
 }
 

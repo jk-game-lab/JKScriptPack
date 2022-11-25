@@ -1,16 +1,30 @@
-﻿/*
- *  SimpleVehicleController.cs
- *
- *  Attach to a gameobject to make it move like a vehicle.
- *
- *  v1.26 -- added to JKScriptPack.
- *  v1.27 -- added collision detection to stop the car (unfinished)
- *
- */
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
+/// ------------------------------------------
+/// <summary>
+/// 
+///     Attach to a gameobject to make it move
+///     like a vehicle.
+///     
+/// </summary>
+/// <remarks>
+/// 
+///     Updated to work with new Input System
+///     (as well as old Input Manager).
+///     
+///     Had previously started adding 
+///     collision detection but this was 
+///     unfinished.
+/// 
+/// </remarks>
+/// ------------------------------------------
+#if ENABLE_INPUT_SYSTEM
+[RequireComponent(typeof(PlayerInput))]
+#endif
 public class SimpleVehicleController : MonoBehaviour
 {
 
@@ -50,7 +64,7 @@ public class SimpleVehicleController : MonoBehaviour
     {
 
         // Forward & backward acceleration
-        float thrust = Input.GetAxis("Vertical");
+        float thrust = GetAxis("Vertical");
         if (thrust == 0)
         {
             speed *= 1 - (rollingResistance * Time.deltaTime);
@@ -59,7 +73,7 @@ public class SimpleVehicleController : MonoBehaviour
         {
             speed += (thrust * maxAcceleration) * Time.deltaTime;
         }
-        if (Input.GetAxis(brakeInput) > 0)
+        if (GetAxis(brakeInput) > 0)
         {
             speed -= Mathf.Sign(speed) * (brakingDeceleration * Time.deltaTime);
         }
@@ -74,7 +88,7 @@ public class SimpleVehicleController : MonoBehaviour
         while (wheelRollAngle > 360) wheelRollAngle -= 360;
 
         // Turning
-        float steeringAngle = Input.GetAxis("Horizontal") * maxSteeringAngle;
+        float steeringAngle = GetAxis("Horizontal") * maxSteeringAngle;
         if (allowTurnOnSpot || Mathf.Abs(speed) > 1.0f)
         {
             transform.Rotate(0, steeringAngle * Time.deltaTime, 0);
@@ -111,5 +125,37 @@ public class SimpleVehicleController : MonoBehaviour
     {
         Debug.Log("Collision " + other.gameObject.name);
     }
+
+    /// <summary>
+    /// Measure move/look direction info from the input controller.
+    /// </summary>
+    /// <param name="direction">Parameter used for old Input.GetAxis()</param>
+    /// <returns>Number -1 to +1 indicating strength of movement on axis.<returns>
+#if ENABLE_INPUT_SYSTEM
+    private float GetAxis(string direction)
+    {
+        InputAction moveAction = GetComponent<PlayerInput>().actions["move"];
+        InputAction lookAction = GetComponent<PlayerInput>().actions["look"];
+        Vector2 move = moveAction.ReadValue<Vector2>();
+        Vector2 look = lookAction.ReadValue<Vector2>();
+        switch (direction)
+        {
+            case "Horizontal":
+                return move.x;
+            case "Vertical":
+                return move.y;
+            case "Mouse X":
+                return look.x;
+            case "Mouse Y":
+                return look.y;
+        }
+        return 0;
+    }
+#else
+    private float GetAxis(string direction)
+    {
+        return Input.GetAxis(direction);
+    }
+#endif
 
 }

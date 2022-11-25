@@ -1,28 +1,40 @@
-﻿/*
- *  Collector.cs
- * 
- *  Attach this to the first person controller (FPC).
- *  Create a list of GameObjects to collect.  When the FPC
- *  collides with the specified GameObject, the object will disappear
- *  and be added to a list.
- * 
- *  When you have collected all objects, your reward will be to reveal (or hide) 
- *  another gameobject (such as a barrier or prize).
- * 
- *  Collectable gameobjects do not need to be set as triggers; this will be done
- *  automatically.
- * 
- *  v1.00 -- added to JKScriptPack
- *  v1.06 -- Added key-to-pickup
- *  v1.09 -- Amended to work with Unity 2017
- *  v1.28 -- Adjusted to work with ThirdPersonController and RigidbodyFirstPersonController.
- *
- */
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using UnityEditor.Experimental.GraphView;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
+/// ------------------------------------------
+/// <summary>
+/// 
+///     Attach this to the first person 
+///     controller (FPC).
+///     
+///     Create a list of GameObjects to 
+///     collect.  When the FPC collides with 
+///     the specified GameObject, the object 
+///     will disappear and be added to a list.
+///
+///     When you have collected all objects, 
+///     your reward will be to reveal (or hide) 
+///     another gameobject (such as a barrier 
+///     or prize).
+///     
+///     Collectable gameobjects do not need to 
+///     be set as triggers; this will be done
+///     automatically.
+///     
+/// </summary>
+/// <remarks>
+/// 
+///     Updated to work with new Input System
+///     (as well as old Input Manager).
+///     
+/// </remarks>
+/// ------------------------------------------
 public class Collector : MonoBehaviour
 {
 
@@ -35,7 +47,11 @@ public class Collector : MonoBehaviour
     }
     public Collectable[] collectables;
 
+#if ENABLE_INPUT_SYSTEM
+    public Key pressKeyToCollect = Key.None;
+#else
     public KeyCode pressKeyToCollect = KeyCode.None;
+#endif
     public AudioClip collectionSound;
     public AudioClip finishedSound;
     public GameObject finishedReveal;
@@ -76,9 +92,9 @@ public class Collector : MonoBehaviour
     }
 
     void OnTriggerStay(Collider other)
-    {                           // Use for collection with a keypress
-                                //Debug.Log("OnTriggerStay=" + other.gameObject.name);
-        if (pressKeyToCollect == KeyCode.None || Input.GetKeyDown(pressKeyToCollect))
+    {   // Use for collection with a keypress
+        //Debug.Log("OnTriggerStay=" + other.gameObject.name);
+        if (IsNone(pressKeyToCollect) || IsKeyPressed(pressKeyToCollect))
         {
             CollectItem(other.gameObject);
         }
@@ -146,5 +162,44 @@ public class Collector : MonoBehaviour
         }
         return all;
     }
+
+    /// <summary>
+    /// Check if a key has been pressed.
+    /// </summary>
+    /// <param name="k">Key on keyboard.</param>
+    /// <returns>True if pressed; false if not.<returns>
+#if ENABLE_INPUT_SYSTEM
+    private bool IsKeyPressed(Key k)
+    {
+        // Check before lookup; current[Key.None] would cause an error
+        if (k != Key.None)
+        {
+            return Keyboard.current[k].wasPressedThisFrame;
+        }
+        return false;
+    }
+#else
+    private bool IsKeyPressed(KeyCode k)
+    {
+        return Input.GetKeyDown(k);
+    }
+#endif
+
+    /// <summary>
+    /// Check if a key is set to "None".
+    /// </summary>
+    /// <param name="k">Key on keyboard.</param>
+    /// <returns>True if it matches "None"; otherwise false.<returns>
+#if ENABLE_INPUT_SYSTEM
+    private bool IsNone(Key k)
+    {
+        return (k == Key.None);
+    }
+#else
+    private bool IsNone(KeyCode k)
+    {
+        return (k == KeyCode.None);
+    }
+#endif
 
 }

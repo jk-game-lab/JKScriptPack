@@ -71,7 +71,7 @@ public class Latcher : MonoBehaviour
         }
 
         // Unlatch?
-        if (fpc && ((IsNone(keyToHold) && Input.anyKeyDown) || IsKeyReleased(keyToHold)))
+        if (fpc && ((IsNone(keyToHold) && IsAnyKeyPressed()) || IsKeyReleased(keyToHold)))
         {
             fpc.transform.rotation = fpcOriginalRotation;
             fpc = null;
@@ -159,14 +159,14 @@ public class Latcher : MonoBehaviour
     /// </summary>
     /// <returns>True if any key is pressed; otherwise false.<returns>
 #if ENABLE_INPUT_SYSTEM
-    private bool IsAnyKey()
+    private bool IsAnyKeyPressed()
     {
         return Keyboard.current.anyKey.isPressed;
     }
 #else
-    private bool IsAnyKey(KeyCode k)
+    private bool IsAnyKeyPressed()
     {
-        return Input.anyKey();
+        return Input.anyKeyDown;
     }
 #endif
 

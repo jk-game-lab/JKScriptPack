@@ -1,3 +1,6 @@
+/* NO LONGER SUPPORTED BY UNITY -- needs to be re-written in C# */
+
+
 /*
  *	ShrinkGrowWithJump.js
  *

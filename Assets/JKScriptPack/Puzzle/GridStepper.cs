@@ -1,7 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;	// needed for List<>
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
+/// ------------------------------------------
+/// <summary>
+/// 
+///     Move around a grid by keypress.
+///     
+/// </summary>
+/// <remarks>
+/// 
+///     Updated to work with new Input System
+///     (as well as old Input Manager).
+///     
+/// </remarks>
+/// ------------------------------------------
+#if ENABLE_INPUT_SYSTEM
+[RequireComponent(typeof(PlayerInput))]
+#endif
 public class GridStepper : MonoBehaviour
 {
 
@@ -26,19 +45,19 @@ public class GridStepper : MonoBehaviour
     {
 
         // check if a key has been pressed
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (GetAxis("Vertical") > 0)
         {
             queue.Add(Vector3.forward);
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (GetAxis("Vertical") < 0)
         {
             queue.Add(Vector3.back);
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (GetAxis("Horizontal") < 0)
         {
             queue.Add(Vector3.left);
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (GetAxis("Horizontal") > 0)
         {
             queue.Add(Vector3.right);
         }
@@ -108,5 +127,37 @@ public class GridStepper : MonoBehaviour
         }
 
     }
+
+    /// <summary>
+    /// Measure move/look direction info from the input controller.
+    /// </summary>
+    /// <param name="direction">Parameter used for old Input.GetAxis()</param>
+    /// <returns>Number -1 to +1 indicating strength of movement on axis.<returns>
+#if ENABLE_INPUT_SYSTEM
+    private float GetAxis(string direction)
+    {
+        InputAction moveAction = GetComponent<PlayerInput>().actions["move"];
+        InputAction lookAction = GetComponent<PlayerInput>().actions["look"];
+        Vector2 move = moveAction.ReadValue<Vector2>();
+        Vector2 look = lookAction.ReadValue<Vector2>();
+        switch (direction)
+        {
+            case "Horizontal":
+                return move.x;
+            case "Vertical":
+                return move.y;
+            case "Mouse X":
+                return look.x;
+            case "Mouse Y":
+                return look.y;
+        }
+        return 0;
+    }
+#else
+    private float GetAxis(string direction)
+    {
+        return Input.GetAxis(direction);
+    }
+#endif
 
 }

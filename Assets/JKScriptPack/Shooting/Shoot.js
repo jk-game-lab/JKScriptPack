@@ -1,4 +1,7 @@
-﻿#pragma strict
+﻿/* NO LONGER SUPPORTED BY UNITY -- needs to be re-written in C# */
+
+
+#pragma strict
 
 public var bullet : GameObject;
 public var speed : float = 5;

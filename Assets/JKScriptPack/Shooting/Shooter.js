@@ -1,4 +1,7 @@
-﻿/*
+﻿/* NO LONGER SUPPORTED BY UNITY -- needs to be re-written in C# */
+
+
+/*
  *	Shooter.js
  *
  *	Attach to a gameobject to allow it to shoot bullets.

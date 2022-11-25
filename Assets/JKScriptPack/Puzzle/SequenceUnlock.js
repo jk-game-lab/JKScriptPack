@@ -1,4 +1,8 @@
-﻿/*
+﻿/* NO LONGER SUPPORTED BY UNITY -- needs to be re-written in C# */
+
+
+
+/*
  *	SequenceUnlock.js
  * 
  *	User must click (with the mouse) a set of objects in the correct order

@@ -1,35 +1,42 @@
-﻿/*
- *  LoadNewScene.cs
- * 
- *  Attach this script to any gameobject in the scene.
- *
- *  However, if you wish to use the 'collide' facility,
- *  you must attach this script to the first person controller.
- *
- *  Leaving the scene blank will restart the current level.
- *
- *  Note: due to a bug in Unity 2017+, the editor may show lighting
- *  darker after loading a scene.  This can be disabled with menu
- *  Window > Lighting > Settings, scene tab > Debug Seggings and
- *  disable Auto Generate; press Generate Lighting to bake the 
- *  lighting once, manually.
- *
- *  v1.00 -- added to JKScriptPack
- *  v1.09 -- updated for Unity 2017
- *  v1.16 -- added TriggerAndKey
- *  v1.41 -- now works with prefab clones
- *	
- */
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
+/// ------------------------------------------
+/// <summary>
+/// 
+///     Attach this script to any gameobject 
+///     in the scene.
+///     
+///     However, if you wish to use the 
+///     'collide' facility, you must attach 
+///     this script to the first person 
+///     controller.
+///     
+///     Leaving the scene blank will restart 
+///     the current level.
+///     
+/// </summary>
+/// <remarks>
+/// 
+///     Updated to work with new Input System
+///     (as well as old Input Manager).
+/// 
+/// </remarks>
+/// ------------------------------------------
 public class LoadNewScene : MonoBehaviour
 {
 
     public string sceneName;
     public GameObject onCollisionWith;
+#if ENABLE_INPUT_SYSTEM
+    public Key onKeyPress;
+#else
     public KeyCode onKeyPress;
+#endif
     public float onTimeout;
     public bool triggerAndKey = false;
 
@@ -45,7 +52,7 @@ public class LoadNewScene : MonoBehaviour
     {
 
         // Check for keypress
-        if (Input.GetKeyDown(onKeyPress))
+        if (IsKeyPressed(onKeyPress))
         {
             if (triggerAndKey)
             {
@@ -122,5 +129,27 @@ public class LoadNewScene : MonoBehaviour
             SceneManager.LoadScene(sceneName);
         }
     }
+
+    /// <summary>
+    /// Check if a key has been pressed.
+    /// </summary>
+    /// <param name="k">Key on keyboard.</param>
+    /// <returns>True if pressed; false if not.<returns>
+#if ENABLE_INPUT_SYSTEM
+    private bool IsKeyPressed(Key k)
+    {
+        // Check before lookup; current[Key.None] would cause an error
+        if (k != Key.None)
+        {
+            return Keyboard.current[k].wasPressedThisFrame;
+        }
+        return false;
+    }
+#else
+    private bool IsKeyPressed(KeyCode k)
+    {
+        return Input.GetKeyDown(k);
+    }
+#endif
 
 }

@@ -1,17 +1,26 @@
-﻿/*
- *  Hopper.cs
- * 
- *  Attach this to a gameobject.  Pressing set keys will make the object
- *  move to a waypoint position.
- * 
- *  v1.37 -- added to JKScriptPack
- *
- */
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
+/// ------------------------------------------
+/// <summary>
+/// 
+///     Pressing set keys will make the object
+///     move to a set waypoint.
+///     
+///     Attach this to a gameobject.
+///     
+/// </summary>
+/// <remarks>
+/// 
+///     Updated to work with new Input System
+///     (as well as old Input Manager).
+///     
+/// </remarks>
+/// ------------------------------------------
 public class Hopper : MonoBehaviour
 {
 
@@ -19,21 +28,30 @@ public class Hopper : MonoBehaviour
     public class Waypoint
     {
         public GameObject gameObject;
+#if ENABLE_INPUT_SYSTEM
+        public Key directKey = Key.None;
+#else
         public KeyCode directKey = KeyCode.None;
+#endif
     }
     public Waypoint[] waypoints;
     public int currentWaypoint = 0;
 
     public float speed = 1.0f;
 
+#if ENABLE_INPUT_SYSTEM
+    public Key nextKey = Key.None;
+    public Key prevKey = Key.None;
+#else
     public KeyCode nextKey = KeyCode.None;
     public KeyCode prevKey = KeyCode.None;
+#endif
 
     void Update()
     {
 
         // Prev/Next keys
-        if (Input.GetKeyDown(prevKey))
+        if (IsKeyPressed(prevKey))
         {
             currentWaypoint--;
             if (currentWaypoint < 0)
@@ -41,7 +59,7 @@ public class Hopper : MonoBehaviour
                 currentWaypoint = 0;
             }
         }
-        if (Input.GetKeyDown(nextKey))
+        if (IsKeyPressed(nextKey))
         {
             currentWaypoint++;
             if (currentWaypoint > waypoints.Length)
@@ -53,7 +71,7 @@ public class Hopper : MonoBehaviour
         // Direct key
         for (int i = 0; i < waypoints.Length; i++)
         {
-            if (Input.GetKeyDown(waypoints[i].directKey))
+            if (IsKeyPressed(waypoints[i].directKey))
             {
                 currentWaypoint = i;
                 break;
@@ -74,4 +92,27 @@ public class Hopper : MonoBehaviour
         }
 
     }
+
+    /// <summary>
+    /// Check if a key has been pressed.
+    /// </summary>
+    /// <param name="k">Key on keyboard.</param>
+    /// <returns>True if pressed; false if not.<returns>
+#if ENABLE_INPUT_SYSTEM
+    private bool IsKeyPressed(Key k)
+    {
+        // Check before lookup; current[Key.None] would cause an error
+        if (k != Key.None)
+        {
+            return Keyboard.current[k].wasPressedThisFrame;
+        }
+        return false;
+    }
+#else
+    private bool IsKeyPressed(KeyCode k)
+    {
+        return Input.GetKeyDown(k);
+    }
+#endif
+
 }

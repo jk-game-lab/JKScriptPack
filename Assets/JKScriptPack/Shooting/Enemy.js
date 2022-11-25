@@ -1,4 +1,7 @@
-﻿/*
+﻿/* NO LONGER SUPPORTED BY UNITY -- needs to be re-written in C# */
+
+
+/*
  * 	Enemy.js
  * 
  * 	Attach this to an enemy who is getting hit by bullets.

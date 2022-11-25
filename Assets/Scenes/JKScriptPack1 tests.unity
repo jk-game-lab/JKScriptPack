@@ -1281,6 +1281,25 @@ MonoBehaviour:
   keepOpen: 0
   openingSound: {fileID: 8300000, guid: ba27c3f7c8e8b6c4cbc84c7541fc7a04, type: 3}
   closingSound: {fileID: 8300000, guid: ba27c3f7c8e8b6c4cbc84c7541fc7a04, type: 3}
+--- !u!1 &396990440 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+  m_PrefabInstance: {fileID: 87098855}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &396990442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396990440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e950e01530f9584c9932b23221ae5c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveTracking: {x: 0, y: 0}
+  LookTracking: {x: 0, y: 0}
 --- !u!1 &399456889
 GameObject:
   m_ObjectHideFlags: 0
