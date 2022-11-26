@@ -8,7 +8,7 @@ namespace JKScriptPack2
     /// ------------------------------------------
     /// <summary>
     /// 
-    ///     Shows information about JKScriptPack.
+    ///     Shows information about JKScriptPack2.
     ///     
     ///     Attach this script to any gameobject
     ///     to show the pack version number in the

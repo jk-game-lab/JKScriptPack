@@ -29,7 +29,7 @@ public class Version_Number : MonoBehaviour
 {
 
     [Tooltip("Current version number of the script pack")]
-    public const string Version = "1.90";
+    public const string Version = "1.91";
 
     void Start()
     {
