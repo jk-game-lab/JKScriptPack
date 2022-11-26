@@ -24,8 +24,8 @@ namespace JKScriptPack2
     /// </summary>
     /// <remarks>
     /// 
-    ///     Updated to work with new Input System
-    ///     (as well as old Input Manager).
+    ///     Works with both new Input System and
+    ///     old Input Manager.
     /// 
     /// </remarks>
     /// ------------------------------------------
