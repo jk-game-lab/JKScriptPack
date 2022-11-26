@@ -45,6 +45,7 @@ namespace JKScriptPack2
             if (Destination)
             {
                 teleportee.transform.position = Destination.transform.position;
+                Physics.SyncTransforms();
             }
         }
 
