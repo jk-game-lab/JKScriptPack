@@ -43,8 +43,8 @@ MonoBehaviour:
     y: 0
     width: 564
     height: 561
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 19
+  controlID: 17
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 58
+  controlID: 109
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 59
+  controlID: 110
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -372,22 +372,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/JKScriptPack2/Waypoint
+    - Assets/Scenes/JKScriptPack1 tests
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/JKScriptPack2/Waypoint
+  - Assets/Scenes/JKScriptPack1 tests
   m_LastFoldersGridSize: -1
   m_LastProjectPath: F:\GitHub\JKScriptPack
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 11}
-    m_SelectedIDs: 18570000
-    m_LastClickedID: 22296
-    m_ExpandedIDs: 00000000e0560000e2560000e4560000e6560000e856000000ca9a3b
+    scrollPos: {x: 0, y: 43}
+    m_SelectedIDs: 20570000
+    m_LastClickedID: 22304
+    m_ExpandedIDs: 00000000e4560000e6560000e8560000ea560000ec5600001857000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -415,7 +415,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000e0560000e2560000e4560000e6560000e8560000
+    m_ExpandedIDs: 00000000e4560000e6560000e8560000ea560000ec560000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -543,9 +543,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 42570000
+      m_SelectedIDs: 08560000
       m_LastClickedID: 0
-      m_ExpandedIDs: 44f2ffffc2f2ffffcaf3ffff48f4ffff12fbffff8e600000
+      m_ExpandedIDs: 12fbffff4655000088550000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -794,9 +794,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 5.964089, y: 0.21594262, z: -5.0758677}
+    m_Target: {x: 6.874626, y: -1.2933167, z: -5.2405586}
     speed: 2
-    m_Value: {x: 5.964089, y: 0.21594262, z: -5.0758677}
+    m_Value: {x: 6.874626, y: -1.2933167, z: -5.2405586}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -843,13 +843,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.1913209, y: 0.3054197, z: -0.06306092, w: -0.9308013}
+    m_Target: {x: -0.2846416, y: 0.4255365, z: -0.14333488, w: -0.8471194}
     speed: 2
-    m_Value: {x: -0.19129674, y: 0.30538115, z: -0.06305296, w: -0.9306838}
+    m_Value: {x: -0.28438956, y: 0.4267516, z: -0.14374313, w: -0.8463709}
   m_Size:
-    m_Target: 9.42595
+    m_Target: 10.513306
     speed: 2
-    m_Value: 9.42595
+    m_Value: 10.513306
   m_Ortho:
     m_Target: 0
     speed: 2
