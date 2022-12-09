@@ -19,7 +19,7 @@ namespace JKScriptPack2
     public class SprintDetector : MonoBehaviour
     {
 
-        [Header("While sprint is detected...")]
+        [Header("If sprinting then ...")]
 
         [Tooltip("Reveal this object (e.g. speed alert)")]
         public GameObject revealObject;

@@ -11,23 +11,33 @@ namespace JKScriptPack2
     ///     Plays footstep sounds when the first
     ///     person controller moves.
     ///     
+    ///     Attach this script to the first person
+    ///     controller.  If the floor object is 
+    ///     tagged with 
+    ///     
     /// </summary>
     /// ------------------------------------------
     public class FootstepSounds : MonoBehaviour
     {
-        [Header("Audio")]
+
+        [Header("Floor detection")]
+
+        [Tooltip("Play footsteps if the floor object has this tag")]
+        public string Tag = "Untagged";
+
+        [Header("Sounds")]
 
         public AudioClip LeftFootSound;
         public AudioClip RightFootSound;
 
-        [Header("Timing")]
+        [Tooltip("Greater pace means faster steps")]
+        public float Pace = 0.7f;
 
-        [Tooltip("Greater period means slower steps")]
-        public float Period = 1.4f;
+        public float Loudness = 1.0f;
 
         private CharacterController controller;
-        private StarterAssets.FirstPersonController fpc;
         private AudioSource audiosource;
+
         private float timeSinceLastFootstep;
         private bool isLeftFoot = true;
 
@@ -36,50 +46,51 @@ namespace JKScriptPack2
 
             // Get FPC info
             controller = GetComponent<CharacterController>();
-            fpc = GetComponent<StarterAssets.FirstPersonController>();
 
             // Initialise audio
             audiosource = gameObject.AddComponent<AudioSource>();
+            audiosource.volume = Loudness;
 
         }
 
-        void Update()
+        void OnControllerColliderHit(ControllerColliderHit hit)
         {
-
-            // What is the ground underneath our feet?
-
-            // Is it time for a footstep?
-            float speed = controller.velocity.magnitude;
-            if (speed > 0 && speed < 20)
+            // Are we walking on the tagged surface?
+            if (hit.gameObject.tag == Tag)
             {
-                float gapBetweenSteps = Period / speed;
 
-                // Check time elapsed
-                timeSinceLastFootstep += Time.deltaTime;
-                if (timeSinceLastFootstep > gapBetweenSteps)
+                // Are we moving?
+                float speed = controller.velocity.magnitude;
+                if (speed > 0 && Pace > 0)
+                {
+
+                    // Check time elapsed
+                    timeSinceLastFootstep += Time.deltaTime;
+                    float gapBetweenSteps = 1 / (speed * Pace);
+                    if (timeSinceLastFootstep > gapBetweenSteps)
+                    {
+
+                        // Make a footstep
+                        if (isLeftFoot)
+                        {
+                            if (LeftFootSound) audiosource.PlayOneShot(LeftFootSound);
+                        }
+                        else
+                        {
+                            if (RightFootSound) audiosource.PlayOneShot(RightFootSound);
+                        }
+                        isLeftFoot = !isLeftFoot;
+                        timeSinceLastFootstep = 0;
+
+                    }
+                }
+                else
                 {
                     timeSinceLastFootstep = 0;
-                    Step();
                 }
             }
-            else
-            {
-                timeSinceLastFootstep = 0;
-            }
 
-        }
 
-        private void Step()
-        {
-            if (isLeftFoot)
-            {
-                if (LeftFootSound) audiosource.PlayOneShot(LeftFootSound);
-            }
-            else
-            {
-                if (RightFootSound) audiosource.PlayOneShot(RightFootSound);
-            }
-            isLeftFoot = !isLeftFoot;
         }
 
     }
