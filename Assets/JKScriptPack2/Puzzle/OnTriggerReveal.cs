@@ -109,7 +109,7 @@ namespace JKScriptPack2
                 activated = true;
                 if (revealObject) revealObject.SetActive(true);
                 if (hideObject) hideObject.SetActive(false);
-                audiosource.PlayOneShot(playSound);
+                if (playSound) audiosource.PlayOneShot(playSound);
                 countdown = timeout;
             }
         }
@@ -134,7 +134,7 @@ namespace JKScriptPack2
                 if (revealObject) revealObject.SetActive(false);
                 if (hideObject) hideObject.SetActive(true);
             }
-            audiosource.PlayOneShot(exitSound);
+            if (exitSound) audiosource.PlayOneShot(exitSound);
             if (onExitEnable) onExitEnable.SetActive(true);
             if (onExitDisable) onExitDisable.SetActive(false);
             countdown = 0.0f;
