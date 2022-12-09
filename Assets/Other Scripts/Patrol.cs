@@ -1,51 +1,70 @@
-﻿// Patrol.cs
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-[RequireComponent(typeof(NavMeshAgent))]
-public class Patrol : MonoBehaviour
+namespace JKScriptPack2
 {
-
-    public Transform[] points;
-    private int destPoint = 0;
-    private NavMeshAgent agent;
-
-    void Start()
+    /// ------------------------------------------
+    /// <summary>
+    /// 
+    ///     Makes a gameobject follow a series of 
+    ///     waypoints within a NavMesh.
+    ///     
+    /// </summary>
+    /// <remarks>
+    /// 
+    ///     Adapted from an example at
+    ///     https://docs.unity3d.com/560/Documentation/Manual/nav-AgentPatrol.html
+    /// 
+    /// </remarks>
+    /// ------------------------------------------
+    [RequireComponent(typeof(NavMeshAgent))]
+    public class Patrol : MonoBehaviour
     {
-        agent = GetComponent<NavMeshAgent>();
 
-        // Disabling auto-braking allows for continuous movement
-        // between points (i.e. the agent doesn't slow down as it
-        // approaches a destination point).
-        agent.autoBraking = false;
+        public Transform[] Waypoints;
 
-        GotoNextPoint();
-    }
+        private int Destination = 0;
+        private NavMeshAgent Agent;
 
-    void GotoNextPoint()
-    {
-        // Returns if no points have been set up
-        if (points.Length == 0)
+        void Start()
         {
-            return;
+            Agent = GetComponent<NavMeshAgent>();
+
+            // Disabling auto-braking allows for continuous movement
+            // between points (i.e. the agent doesn't slow down as it
+            // approaches a destination point).
+            Agent.autoBraking = false;
+
+            GoToNextWaypoint();
         }
 
-        // Set the agent to go to the currently selected destination.
-        agent.destination = points[destPoint].position;
-
-        // Choose the next point in the array as the destination,
-        // cycling to the start if necessary.
-        destPoint = (destPoint + 1) % points.Length;
-    }
-
-    void Update()
-    {
-        // Choose the next destination point when the agent gets
-        // close to the current one.
-        if (agent.enabled && !agent.pathPending && agent.remainingDistance < 0.5f)
+        private void GoToNextWaypoint()
         {
-            GotoNextPoint();
+            // Returns if no points have been set up
+            if (Waypoints.Length == 0)
+            {
+                return;
+            }
+
+            // Set the agent to go to the currently selected destination.
+            Agent.destination = Waypoints[Destination].position;
+
+            // Choose the next point in the array as the destination,
+            // cycling to the start if necessary.
+            Destination = (Destination + 1) % Waypoints.Length;
+
         }
+
+        void Update()
+        {
+            // Choose the next destination point when the agent gets
+            // close to the current one.
+            if (Agent.enabled && !Agent.pathPending && Agent.remainingDistance < 0.5f)
+            {
+                GoToNextWaypoint();
+            }
+        }
+
     }
 }

@@ -9,11 +9,13 @@ namespace JKScriptPack2
     /// 
     ///     Chases a GameObject.
     ///     
-    ///     Attach this to the chaser and set the
+    ///     Attach this to the chaser (which must 
+    ///     already be using Patrol) and set the
     ///     victim to be the first person controller.
     ///     
     /// </summary>
     /// ------------------------------------------
+    [RequireComponent(typeof(JKScriptPack2.Patrol))]
     public class Chaser : MonoBehaviour
     {
 
@@ -29,6 +31,55 @@ namespace JKScriptPack2
 
         [Tooltip("Which object is being chased? (Typically first person controller)")]
         public GameObject Victim;
+
+        private JKScriptPack2.Patrol PatrolScript;
+
+        void Start()
+        {
+            PatrolScript = GetComponent<JKScriptPack2.Patrol>();
+        }
+
+        void Update()
+        {
+            // Where am I?
+            Vector3 thisPosition = this.transform.position;
+            Vector3 thisHeading = this.transform.forward;
+
+            // Can I see the target?
+            if (Victim)
+            {
+
+                // Work out where the target is
+                Vector3 victimPosition = Victim.transform.position;
+                Vector3 victimHeading = victimPosition - thisPosition;
+
+                // How far apart are we?
+                float distance = Vector3.Distance(thisPosition, victimPosition);
+                float angle = Vector3.Angle(thisHeading, victimHeading);
+
+                // Is the target within range?
+                // Does the ray collide with anything along the way ?
+                if (distance <= Range && angle <= (Angle / 2)
+                    && !Physics.Raycast(thisPosition, victimHeading, distance - 1.5f))
+                {
+
+                    //                    PatrolScript.AddWaypoint();
+
+                }
+                else
+                {
+
+                    // Reset
+
+                }
+
+            }
+
+        }
+
+
+
+
 
         /*
          * 
