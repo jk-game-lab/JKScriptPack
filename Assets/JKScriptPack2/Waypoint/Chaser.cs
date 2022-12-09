@@ -63,6 +63,14 @@ namespace JKScriptPack2
                     && !Physics.Raycast(thisPosition, victimHeading, distance - 1.5f))
                 {
 
+
+// Note: change chaser so that it disable patrol if it exists, stores current location and chases;
+// if released from chase, navigate back to origin.  Then re-enable patrol/
+// THis way the chaser can act without patrol if needed.
+//
+// Similarly, should the weepingangel script disable the navmesh to freeze the player, regardless of whether
+// chaser and/or patrol are being used?
+
                     //                    PatrolScript.AddWaypoint();
 
                 }
