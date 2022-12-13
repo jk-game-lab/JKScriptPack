@@ -9,13 +9,12 @@ namespace JKScriptPack2
     /// 
     ///     Chases a GameObject.
     ///     
-    ///     Attach this to the chaser (which must 
-    ///     already be using Patrol) and set the
+    ///     Attach this to the chaser and set the
     ///     victim to be the first person controller.
     ///     
     /// </summary>
     /// ------------------------------------------
-    [RequireComponent(typeof(JKScriptPack2.Patrol))]
+    [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
     public class Chaser : MonoBehaviour
     {
 
@@ -29,33 +28,54 @@ namespace JKScriptPack2
 
         [Header("Victim")]
 
-        [Tooltip("Which object is being chased? (Typically first person controller)")]
+        [Tooltip("Which object is being chased? (Typically this would be the first person controller)")]
         public GameObject Victim;
 
-        private UnityEngine.AI.NavMeshAgent Agent;
-        private JKScriptPack2.Patrol PatrolScript;
-
+        private UnityEngine.AI.NavMeshAgent agent;
+        private JKScriptPack2.Patrol patrol;
+        private Transform chaseStart;
+        private bool isChasing;
+  
         void Start()
         {
-            Agent = new UnityEngine.AI.NavMeshAgent();
-            // Set the initial location to current location;
-            // set destination to victim;
-            // if lost sight, switch back.
-
-            PatrolScript = GetComponent<JKScriptPack2.Patrol>();
+            agent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
+            isChasing = false;
         }
 
         void Update()
+        {
+            bool isSeen = CanSeeVictim();
+            if (isChasing)
+            {
+                if (isSeen)
+                {
+                    Chase();
+                }
+                else
+                {
+                    StopChasing();
+                }
+            }
+            else
+            {
+                if (isSeen)
+                {
+                    StartChasing();
+                }
+            }
+        }
+
+        private bool CanSeeVictim()
         {
             // Where am I?
             Vector3 thisPosition = this.transform.position;
             Vector3 thisHeading = this.transform.forward;
 
-            // Can I see the target?
+            // Can I see the victim?
             if (Victim)
             {
 
-                // Work out where the target is
+                // Work out where the victim is
                 Vector3 victimPosition = Victim.transform.position;
                 Vector3 victimHeading = victimPosition - thisPosition;
 
@@ -63,49 +83,54 @@ namespace JKScriptPack2
                 float distance = Vector3.Distance(thisPosition, victimPosition);
                 float angle = Vector3.Angle(thisHeading, victimHeading);
 
-                // Is the target within range?
+                // Is the victim within range?
                 // Does the ray collide with anything along the way ?
                 if (distance <= Range && angle <= (Angle / 2)
                     && !Physics.Raycast(thisPosition, victimHeading, distance - 1.5f))
                 {
-
-
-// Note: change chaser so that it disable patrol if it exists, stores current location and chases;
-// if released from chase, navigate back to origin.  Then re-enable patrol/
-// THis way the chaser can act without patrol if needed.
-//
-// Similarly, should the weepingangel script disable the navmesh to freeze the player, regardless of whether
-// chaser and/or patrol are being used?
-
-                    //                    PatrolScript.AddWaypoint();
-
-                }
-                else
-                {
-
-                    // Reset
-
+                    return true;
                 }
 
             }
 
+            return false;
         }
 
+        private void StartChasing()
+        {
+            isChasing = true;
 
+            // Record current position
+            chaseStart = this.transform;
 
+            // if Patrol script is being used, disable it
+            patrol = this.GetComponent<JKScriptPack2.Patrol>();
+            if (patrol)
+            {
+                patrol.enabled = false;
+            }
 
+        }
 
-        /*
-         * 
-         * Break into three parts:
-         *  Chase script -- makes something with a NavMesh chase a player (by adding an extra destination to the navmesh temporarily)
-         *  WeepingAngel -- detects when the player sees it, and disables the Navmesh agent (freezing the enemy)
-         *  Detect when caught script
-         * 
-         * 
-         */
+        private void Chase()
+        {
+            agent.destination = Victim.transform.position;
+        }
 
+        private void StopChasing()
+        {
+            isChasing = false;
 
+            // Send back to pre-chase position
+            agent.destination = chaseStart.position;
+
+            // if Patrol script is being used, re-enable it
+            if (patrol)
+            {
+                patrol.enabled = true;
+            }
+
+        }
 
     }
 }

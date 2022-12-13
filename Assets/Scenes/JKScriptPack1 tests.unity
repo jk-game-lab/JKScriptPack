@@ -6880,7 +6880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Range: 10
   Angle: 90
-  Victim: {fileID: 0}
+  Victim: {fileID: 396990440}
 --- !u!4 &1910217426 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4135013735270702856, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
