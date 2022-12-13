@@ -32,10 +32,16 @@ namespace JKScriptPack2
         [Tooltip("Which object is being chased? (Typically first person controller)")]
         public GameObject Victim;
 
+        private UnityEngine.AI.NavMeshAgent Agent;
         private JKScriptPack2.Patrol PatrolScript;
 
         void Start()
         {
+            Agent = new UnityEngine.AI.NavMeshAgent();
+            // Set the initial location to current location;
+            // set destination to victim;
+            // if lost sight, switch back.
+
             PatrolScript = GetComponent<JKScriptPack2.Patrol>();
         }
 
