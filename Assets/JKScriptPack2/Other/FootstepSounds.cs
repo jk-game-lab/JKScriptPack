@@ -45,10 +45,10 @@ namespace JKScriptPack2
         {
 
             // Get FPC info
-            controller = GetComponent<CharacterController>();
+            controller = this.GetComponent<CharacterController>();
 
             // Initialise audio
-            audiosource = gameObject.AddComponent<AudioSource>();
+            audiosource = this.gameObject.AddComponent<AudioSource>();
             audiosource.volume = Loudness;
 
         }

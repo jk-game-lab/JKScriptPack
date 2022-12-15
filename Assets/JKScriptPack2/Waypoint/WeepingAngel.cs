@@ -29,10 +29,12 @@ namespace JKScriptPack2
         public float FieldOfView = 60;
 
         private NavMeshAgent agent;
+        private bool agentState;
 
         void Start()
         {
             agent = this.GetComponent<NavMeshAgent>();
+            agentState = agent.enabled;
 
             // Move this object & the victim to another layer, so they do not block raycasts
             SetLayerIncludingChildren(this.gameObject, 2);
@@ -58,8 +60,14 @@ namespace JKScriptPack2
 
         void Update()
         {
-            bool isSeen = IsObserved();
-            Debug.Log("Seen = " + isSeen);
+            if (IsObserved())
+            {
+                agent.enabled = false;
+            }
+            else
+            {
+                agent.enabled = agentState;
+            }
         }
 
         private bool IsObserved()
@@ -86,12 +94,16 @@ namespace JKScriptPack2
 
                     // Check whether the angel can be seen
                     Ray ray = new Ray(observerPosition, observerToAngel.normalized);
-                    RaycastHit hitinfo;
-                    bool isVisible = Physics.Raycast(ray, out hitinfo);
-                    if (isVisible)
+                    RaycastHit hit;
+                    bool isBlocked = Physics.Raycast(ray, out hit);
+                    if (!isBlocked)
                     {
                         // DEBUG: Draw a ray to the angel
-                        Debug.DrawLine(observerPosition, angelPosition, Color.red);
+                        float distance = observerToAngel.magnitude;
+                        //Debug.DrawLine(observerPosition, angelPosition, Color.red, distance);
+                        Debug.DrawRay(observerPosition, observerToAngel, Color.red);
+
+                        // Need to sort out seeing things at head height
 
                         // Victim can see me
                         return true;
