@@ -58,6 +58,11 @@ namespace JKScriptPack2
 
         void Update()
         {
+            // Debug mode only: draw a line to the destination
+            Vector3 thisPosition = this.transform.position;
+            Vector3 waypointPosition = Agent.destination;
+            Debug.DrawRay(thisPosition, waypointPosition - thisPosition, Color.cyan);
+
             // Choose the next destination point when the agent gets
             // close to the current one.
             if (Agent.enabled && !Agent.pathPending && Agent.remainingDistance < 0.5f)
