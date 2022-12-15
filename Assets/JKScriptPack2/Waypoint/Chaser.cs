@@ -24,7 +24,7 @@ namespace JKScriptPack2
         public float Range = 10.0f;
 
         [Tooltip("Detection field of view (in degrees)")]
-        public float Angle = 120;
+        public float FieldOfView = 120;
 
         [Header("Victim")]
 
@@ -94,7 +94,7 @@ namespace JKScriptPack2
             Vector3 thisHeading = this.transform.forward;
 
             // Draw the chase zone
-            float halfangle = Angle / 2;
+            float halfangle = FieldOfView / 2;
             Vector3 lastpos = Vector3.zero;
             for (float a = -halfangle; a <= halfangle; a += halfangle / 12)
             {
@@ -114,7 +114,7 @@ namespace JKScriptPack2
                 // Check range
                 float victimDistance = victimHeading.magnitude;
                 float victimAngle = Vector3.Angle(thisHeading, victimHeading);
-                if (victimDistance <= Range && victimAngle <= (Angle / 2))
+                if (victimDistance <= Range && victimAngle <= (FieldOfView / 2))
                 {
 
                     // Check whether the view is blocked

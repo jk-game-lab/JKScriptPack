@@ -9,11 +9,11 @@ namespace JKScriptPack2
     /// 
     ///     Makes a GameObject act like a Weeping
     ///     Angel (from Doctor Who).  If it is 
-    ///     being watched, it freezes and cannot 
+    ///     being observed, it freezes and cannot 
     ///     move.
     ///     
-    ///     Attach this to the chaser and set the
-    ///     victim to be the first person controller.
+    ///     Attach this to a chaser and set the
+    ///     observer to the first person controller.
     ///     
     /// </summary>
     /// ------------------------------------------
@@ -22,11 +22,11 @@ namespace JKScriptPack2
     {
         [Header("Observer")]
 
-        [Tooltip("Which object is being chased? (Typically this would be the first person controller)")]
+        [Tooltip("Object being chased by the angel? (Typically the first person controller)")]
         public GameObject Observer;
 
         [Tooltip("Detection field of view (in degrees)")]
-        public float Angle = 120;
+        public float FieldOfView = 60;
 
         private NavMeshAgent agent;
 
@@ -59,34 +59,39 @@ namespace JKScriptPack2
         void Update()
         {
             bool isSeen = IsObserved();
-            Debug.Log(isSeen);
+            Debug.Log("Seen = " + isSeen);
         }
 
         private bool IsObserved()
         {
-            // Can the observer see me?
             if (Observer)
             {
-                // Where is the observer?
                 Vector3 observerPosition = Observer.transform.position;
-                Vector3 observerHeading = Observer.transform.forward;
-
-                // Where is the angel?
+                Vector3 observerRotation = Observer.transform.forward;
                 Vector3 angelPosition = this.transform.position;
-                Vector3 angelHeading = this.transform.forward;
+                Vector3 observerToAngel = angelPosition - observerPosition;
+                float halfFOV = FieldOfView / 2;
 
-                float angle = Vector3.Angle(observerHeading, angelHeading);
-                if (angle <= (Angle / 2))
+                // DEBUG: Draw the field-of-view
+                float lineLength = 50.0f;
+                Vector3 leftLimit = (Quaternion.AngleAxis(-halfFOV, Vector3.up) * observerRotation) * lineLength;
+                Vector3 rightLimit = (Quaternion.AngleAxis(+halfFOV, Vector3.up) * observerRotation) * lineLength;
+                Debug.DrawLine(observerPosition, observerPosition + leftLimit, Color.yellow);
+                Debug.DrawLine(observerPosition, observerPosition + rightLimit, Color.yellow);
+
+                // Is the angel within the observer's field-of-view?
+                float angle = Vector3.Angle(observerToAngel, observerRotation);
+                if (angle <= halfFOV)
                 {
 
-                    // Check whether the view is blocked
+                    // Check whether the angel can be seen
+                    Ray ray = new Ray(observerPosition, observerToAngel.normalized);
                     RaycastHit hitinfo;
-                    bool viewBlocked = Physics.Raycast(observerPosition, observerHeading.normalized, out hitinfo);
-                    if (!viewBlocked)
+                    bool isVisible = Physics.Raycast(ray, out hitinfo);
+                    if (isVisible)
                     {
-
-                        // Debug mode: draw ray to victim
-                        Debug.DrawRay(observerPosition, observerHeading, Color.red);
+                        // DEBUG: Draw a ray to the angel
+                        Debug.DrawLine(observerPosition, angelPosition, Color.red);
 
                         // Victim can see me
                         return true;
@@ -95,7 +100,6 @@ namespace JKScriptPack2
                 }
 
             }
-
             return false;
         }
 
