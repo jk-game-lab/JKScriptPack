@@ -31,29 +31,15 @@ namespace JKScriptPack2
         {
             Agent = GetComponent<NavMeshAgent>();
 
-            // Disabling auto-braking allows for continuous movement
-            // between points (i.e. the agent doesn't slow down as it
-            // approaches a destination point).
-            Agent.autoBraking = false;
-
-            GoToNextWaypoint();
-        }
-
-        private void GoToNextWaypoint()
-        {
-            // Returns if no points have been set up
-            if (Waypoints.Length == 0)
+            // Disable auto-braking.  This allows for continuous
+            // movement between points (i.e. the agent doesn't
+            // slow down as it approaches a destination point).
+            if (Agent.enabled)
             {
-                return;
+                Agent.autoBraking = false;
             }
 
-            // Set the agent to go to the currently selected destination.
-            Agent.destination = Waypoints[Destination].position;
-
-            // Choose the next point in the array as the destination,
-            // cycling to the start if necessary.
-            Destination = (Destination + 1) % Waypoints.Length;
-
+            GoToNextWaypoint();
         }
 
         void Update()
@@ -69,6 +55,26 @@ namespace JKScriptPack2
             {
                 GoToNextWaypoint();
             }
+        }
+
+        private void GoToNextWaypoint()
+        {
+            // Returns if no points have been set up
+            if (Waypoints.Length == 0)
+            {
+                return;
+            }
+
+            // Set the agent to go to the currently selected destination.
+            if (Agent.enabled)
+            {
+                Agent.destination = Waypoints[Destination].position;
+            }
+
+            // Choose the next point in the array as the destination,
+            // cycling to the start if necessary.
+            Destination = (Destination + 1) % Waypoints.Length;
+
         }
 
     }

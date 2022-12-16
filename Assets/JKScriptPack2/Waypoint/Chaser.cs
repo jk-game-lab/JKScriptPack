@@ -157,7 +157,10 @@ namespace JKScriptPack2
         private void Chase()
         {
             // Head toward the victim
-            agent.destination = Victim.transform.position;
+            if (agent.enabled)
+            {
+                agent.destination = Victim.transform.position;
+            }
 
             // Look toward the victim
             Vector3 thisPosition = this.transform.position;
@@ -178,7 +181,10 @@ namespace JKScriptPack2
             isChasing = false;
 
             // Send back to pre-chase position
-            agent.destination = chaseStart.position;
+            if (agent.enabled)
+            {
+                agent.destination = chaseStart.position;
+            }
 
             // if Patrol script is being used, re-enable it
             if (patrol)

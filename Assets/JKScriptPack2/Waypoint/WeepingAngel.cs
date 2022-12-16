@@ -28,18 +28,33 @@ namespace JKScriptPack2
         [Tooltip("Detection field of view (in degrees)")]
         public float FieldOfView = 60;
 
+        [Tooltip("How high are the eyes (above the object pivot)?")]
+        public float EyeHeight = 1.5f;
+
         private NavMeshAgent agent;
         private bool agentState;
 
+        void Reset()
+        {
+            // When this script is attached to an object, set certain properties automatically
+            GameObject playerCapsule = GameObject.Find("PlayerCapsule");
+            if (playerCapsule)
+            {
+                Observer = playerCapsule;
+                CharacterController controller = Observer.transform.GetComponent<CharacterController>();
+                EyeHeight = controller.height * 0.85f;
+            }
+        }
+
         void Start()
         {
+            // Connect to the NavMeshAgent
             agent = this.GetComponent<NavMeshAgent>();
             agentState = agent.enabled;
 
             // Move this object & the victim to another layer, so they do not block raycasts
             SetLayerIncludingChildren(this.gameObject, 2);
             SetLayerIncludingChildren(Observer, 2);
-
         }
 
         private void SetLayerIncludingChildren(GameObject g, int layer)
@@ -74,9 +89,10 @@ namespace JKScriptPack2
         {
             if (Observer)
             {
-                Vector3 observerPosition = Observer.transform.position;
+                Vector3 eyeOffset = new Vector3(0, EyeHeight, 0);
+                Vector3 observerPosition = Observer.transform.position + eyeOffset;
                 Vector3 observerRotation = Observer.transform.forward;
-                Vector3 angelPosition = this.transform.position;
+                Vector3 angelPosition = this.transform.position + eyeOffset;
                 Vector3 observerToAngel = angelPosition - observerPosition;
                 float halfFOV = FieldOfView / 2;
 
@@ -103,9 +119,7 @@ namespace JKScriptPack2
                         //Debug.DrawLine(observerPosition, angelPosition, Color.red, distance);
                         Debug.DrawRay(observerPosition, observerToAngel, Color.red);
 
-                        // Need to sort out seeing things at head height
-
-                        // Victim can see me
+                        // Observer can see angel
                         return true;
                     }
 
