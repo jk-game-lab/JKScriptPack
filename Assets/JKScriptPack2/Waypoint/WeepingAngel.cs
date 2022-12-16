@@ -17,7 +17,7 @@ namespace JKScriptPack2
     ///     
     /// </summary>
     /// ------------------------------------------
-    [RequireComponent(typeof(NavMeshAgent))]
+    //[RequireComponent(typeof(NavMeshAgent))]
     public class WeepingAngel : MonoBehaviour
     {
         [Header("Observer")]
@@ -33,6 +33,10 @@ namespace JKScriptPack2
 
         private NavMeshAgent agent;
         private bool agentState;
+        private BetterWaypointFollower bwfollower;
+        private bool bwfollowerState;
+        private WaypointFollower follower;
+        private bool followerState;
 
         void Reset()
         {
@@ -48,9 +52,26 @@ namespace JKScriptPack2
 
         void Start()
         {
-            // Connect to the NavMeshAgent
+            // Connect to the NavMeshAgent (if one exists)
             agent = this.GetComponent<NavMeshAgent>();
-            agentState = agent.enabled;
+            if (agent)
+            {
+                agentState = agent.enabled;
+            }
+
+            // Connect to the WaypointFollower (if one exists)
+            follower = this.GetComponent<WaypointFollower>();
+            if (follower)
+            {
+                followerState = follower.enabled;
+            }
+
+            // Connect to the BetterWaypointFollower (if one exists)
+            bwfollower = this.GetComponent<BetterWaypointFollower>();
+            if (bwfollower)
+            {
+                bwfollowerState = bwfollower.enabled;
+            }
 
             // Move this object & the victim to another layer, so they do not block raycasts
             SetLayerIncludingChildren(this.gameObject, 2);
@@ -77,11 +98,33 @@ namespace JKScriptPack2
         {
             if (IsObserved())
             {
-                agent.enabled = false;
+                if (agent)
+                {
+                    agent.enabled = false;
+                }
+                if (follower)
+                {
+                    follower.enabled = false;
+                }
+                if (bwfollower)
+                {
+                    bwfollower.enabled = false;
+                }
             }
             else
             {
-                agent.enabled = agentState;
+                if (agent)
+                {
+                    agent.enabled = agentState;
+                }
+                if (follower)
+                {
+                    follower.enabled = followerState;
+                }
+                if (bwfollower)
+                {
+                    bwfollower.enabled = bwfollowerState;
+                }
             }
         }
 

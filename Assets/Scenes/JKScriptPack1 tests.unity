@@ -868,6 +868,21 @@ MonoBehaviour:
   walkAnimation: 
   idleWhenTurning: 0
   onFlatPlane: 1
+--- !u!114 &142173801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142173798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1a441427bd3c5e4b87ecb4069a8b88b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Observer: {fileID: 396990440}
+  FieldOfView: 60
+  EyeHeight: 1.7
 --- !u!1 &178951548
 GameObject:
   m_ObjectHideFlags: 0
@@ -6878,6 +6893,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Observer: {fileID: 396990440}
   FieldOfView: 60
+  EyeHeight: 1.7
 --- !u!4 &1910217426 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4135013735270702856, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
